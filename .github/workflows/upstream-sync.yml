@@ -1,0 +1,84 @@
+name: upstream-sync
+
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: origami
+          fetch-depth: 0
+
+      - name: Find the latest upstream release tag
+        id: tag
+        run: |
+          git remote add upstream https://github.com/BEDOLAGA-DEV/bedolaga-cabinet.git
+          git fetch --tags upstream
+          LATEST=$(git tag --list 'v*' --sort=-v:refname | head -1)
+          echo "latest=$LATEST" >> "$GITHUB_OUTPUT"
+          if git merge-base --is-ancestor "$LATEST" origami; then
+            echo "uptodate=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Merge the tag into a sync branch
+        if: steps.tag.outputs.uptodate != 'true'
+        id: merge
+        run: |
+          git config user.name "origami-sync"
+          git config user.email "origami-sync@users.noreply.github.com"
+          BR="sync/${{ steps.tag.outputs.latest }}"
+          git checkout -b "$BR"
+          if git merge --no-edit "${{ steps.tag.outputs.latest }}"; then
+            echo "conflict=false" >> "$GITHUB_OUTPUT"
+          else
+            git merge --abort
+            echo "conflict=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.tag.outputs.uptodate != 'true' && steps.merge.outputs.conflict == 'false'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Type-check, test, build
+        if: steps.tag.outputs.uptodate != 'true' && steps.merge.outputs.conflict == 'false'
+        id: check
+        continue-on-error: true
+        run: |
+          npm ci
+          npm run type-check
+          npm test
+          npm run build
+
+      - name: Open a pull request (merge is clean)
+        if: steps.tag.outputs.uptodate != 'true' && steps.merge.outputs.conflict == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BR="sync/${{ steps.tag.outputs.latest }}"
+          git push -f origin "$BR"
+          STATUS="проверки пройдены"
+          if [ "${{ steps.check.outcome }}" != "success" ]; then STATUS="проверки НЕ пройдены, смотрите лог запуска"; fi
+          gh pr create --base origami --head "$BR" \
+            --title "Обновление апстрима до ${{ steps.tag.outputs.latest }}" \
+            --body "Автоматическое слияние тега апстрима. Результат: $STATUS." || true
+
+      - name: Open an issue (merge conflicts)
+        if: steps.tag.outputs.uptodate != 'true' && steps.merge.outputs.conflict == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "Конфликт при слиянии апстрима ${{ steps.tag.outputs.latest }}" \
+            --body "Слияние тега ${{ steps.tag.outputs.latest }} в ветку origami даёт конфликты. Нужно слить вручную (инструкция в ORIGAMI.md)."
