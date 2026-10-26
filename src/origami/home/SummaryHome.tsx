@@ -2,22 +2,16 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
 import { subscriptionApi } from '@/api/subscription';
+import { PlusIcon } from '@/components/icons';
 import { API } from '@/config/constants';
 import { useAuthStore } from '@/store/auth';
 import type { Subscription } from '@/types';
 import { displayName } from '@/utils/displayName';
+import { HelpBlock } from './blocks';
+import { longDate, trafficPercent } from './format';
 
 function deviceTitle(d: { local_name?: string | null; device_model: string; platform: string }) {
   return d.local_name?.trim() || d.device_model || d.platform;
-}
-
-function usedPercent(s: Subscription): number {
-  if (!(s.traffic_limit_gb > 0)) return 0;
-  const p =
-    s.traffic_used_percent > 0
-      ? s.traffic_used_percent
-      : (s.traffic_used_gb / s.traffic_limit_gb) * 100;
-  return Math.max(0, Math.min(100, Math.round(p)));
 }
 
 /**
@@ -37,9 +31,7 @@ export default function SummaryHome({ subscription }: { subscription: Subscripti
   });
 
   const unlimited = !(subscription.traffic_limit_gb > 0);
-  const until = subscription.end_date
-    ? new Date(subscription.end_date).toLocaleDateString(i18n.language)
-    : '';
+  const until = longDate(subscription.end_date, i18n.language);
   const total = devices?.total ?? 0;
   const limit = devices?.device_limit ?? subscription.device_limit;
 
@@ -63,7 +55,7 @@ export default function SummaryHome({ subscription }: { subscription: Subscripti
         </div>
         <div className="og-big">
           {subscription.days_left}
-          <small>{t('origami.summary.days')}</small>
+          <small>{t('origami.summary.daysWord', { count: subscription.days_left })}</small>
         </div>
         {until && <div className="og-sm">{t('origami.summary.until', { date: until })}</div>}
 
@@ -77,7 +69,7 @@ export default function SummaryHome({ subscription }: { subscription: Subscripti
         </div>
         {!unlimited && (
           <div className="og-meter" style={{ marginTop: 10 }} role="presentation">
-            <i style={{ width: `${usedPercent(subscription)}%` }} />
+            <i style={{ width: `${trafficPercent(subscription)}%` }} />
           </div>
         )}
 
@@ -90,6 +82,7 @@ export default function SummaryHome({ subscription }: { subscription: Subscripti
             className="og-btn og-btn-ghost"
             onClick={() => navigate('/add-device')}
           >
+            <PlusIcon className="h-5 w-5" />
             {t('origami.summary.addDevice')}
           </button>
         </div>
@@ -114,7 +107,9 @@ export default function SummaryHome({ subscription }: { subscription: Subscripti
               </div>
               <div style={{ minWidth: 0 }}>
                 <b style={{ overflowWrap: 'anywhere' }}>{deviceTitle(d)}</b>
-                <div className="og-sm">{d.platform}</div>
+                <div className="og-sm">
+                  {[d.platform, longDate(d.created_at, i18n.language)].filter(Boolean).join(', ')}
+                </div>
               </div>
             </div>
           ))
@@ -125,15 +120,11 @@ export default function SummaryHome({ subscription }: { subscription: Subscripti
         )}
       </section>
 
-      <div className="og-help">
-        <div>
-          <b>{t('origami.summary.helpTitle')}</b>
-          <div className="og-sm">{t('origami.summary.helpText')}</div>
-        </div>
-        <Link to="/support" className="og-btn og-btn-sm og-btn-ghost">
-          {t('origami.summary.helpButton')}
-        </Link>
-      </div>
+      <HelpBlock
+        title={t('origami.summary.helpTitle')}
+        text={t('origami.summary.helpText')}
+        button={t('origami.summary.helpButton')}
+      />
     </div>
   );
 }

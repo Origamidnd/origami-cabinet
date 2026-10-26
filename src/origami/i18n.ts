@@ -10,7 +10,8 @@ import ru from './locales/ru.json';
 let registered = false;
 
 export function registerOrigamiLocales(): void {
-  if (registered) return;
+  // Без инициализированного i18next (изолированные тесты компонентов) регистрировать нечего.
+  if (registered || typeof i18n.addResourceBundle !== 'function') return;
   registered = true;
   i18n.addResourceBundle('ru', 'translation', ru, true, false);
   i18n.addResourceBundle('en', 'translation', en, true, false);

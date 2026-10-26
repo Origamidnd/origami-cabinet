@@ -23,7 +23,7 @@ export default function OrigamiHome({ stock }: { stock: ReactNode }) {
     queryKey: ['subscription'],
     queryFn: () => subscriptionApi.getSubscription(),
     staleTime: API.BALANCE_STALE_TIME_MS,
-    enabled: state === 'summary' || state === 'renew',
+    enabled: state === 'summary' || state === 'renew' || state === 'wizard',
   });
   const subscription = data?.subscription ?? null;
 
@@ -31,7 +31,7 @@ export default function OrigamiHome({ stock }: { stock: ReactNode }) {
     case 'loading':
       return <PageSkeleton />;
     case 'wizard':
-      return <WizardHome />;
+      return <WizardHome subscription={subscription} />;
     case 'summary':
       return subscription ? <SummaryHome subscription={subscription} /> : <PageSkeleton />;
     case 'renew':

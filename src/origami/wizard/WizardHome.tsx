@@ -3,10 +3,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
 import { subscriptionApi } from '@/api/subscription';
+import type { Subscription } from '@/types';
 import { usePlatform } from '@/platform';
 import { useAuthStore } from '@/store/auth';
 import { displayName } from '@/utils/displayName';
 import { useConnect } from '../connect/useConnect';
+import { HelpBlock, SummaryStrip } from '../home/blocks';
+import { trafficPercentLabel } from '../home/format';
 import type { WizardStep } from './progress';
 import { useWizardProgress } from './useWizardProgress';
 
@@ -26,7 +29,7 @@ function stateOf(index: WizardStep, current: WizardStep): StepState {
  * Шаги 1-2 человек подтверждает сам (серверного признака «приложение установлено» нет), шаг 3 закрывается
  * сам, когда в списке устройств появляется запись: хук состояния главной увидит это и покажет сводку.
  */
-export default function WizardHome() {
+export default function WizardHome({ subscription }: { subscription?: Subscription | null }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -62,7 +65,11 @@ export default function WizardHome() {
     return () => window.clearTimeout(timer);
   }, [step]);
 
-  const { isFetching, refetch } = useQuery({
+  const {
+    data: devices,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ['devices'],
     queryFn: () => subscriptionApi.getDevices(),
     refetchInterval: step === 3 && !timedOut ? POLL_INTERVAL_MS : false,
@@ -239,6 +246,31 @@ export default function WizardHome() {
           </div>
         </div>
       )}
+
+      {subscription && (
+        <SummaryStrip
+          cells={[
+            {
+              label: t('origami.strip.left'),
+              value: `${subscription.days_left} ${t('origami.strip.left_unit')}`,
+            },
+            { label: t('origami.summary.traffic'), value: trafficPercentLabel(subscription) },
+            {
+              label: t('origami.summary.devices'),
+              value: t('origami.summary.deviceLimit', {
+                used: devices?.total ?? 0,
+                limit: devices?.device_limit ?? subscription.device_limit,
+              }),
+            },
+          ]}
+        />
+      )}
+
+      <HelpBlock
+        title={t('origami.wizardHelp.title')}
+        text={t('origami.wizardHelp.text')}
+        button={t('origami.summary.helpButton')}
+      />
 
       <div className="og-row og-row-start" style={{ marginTop: 26 }}>
         <button type="button" className="og-link" onClick={dismiss}>

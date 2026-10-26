@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { QRCodeSVG } from 'qrcode.react';
 import { Link, useNavigate } from 'react-router';
 import { subscriptionApi } from '@/api/subscription';
 import { usePlatform } from '@/platform';
 import { copyToClipboard } from '@/utils/clipboard';
-import { appId, localized, recommendedApp } from '../connect/connectModel';
+import { appId, findAddLink, localized, recommendedApp } from '../connect/connectModel';
 import { useConnect } from '../connect/useConnect';
 import { registerOrigamiLocales } from '../i18n';
 import { useWizardProgress } from '../wizard/useWizardProgress';
@@ -59,13 +60,6 @@ export default function AddDevice() {
     }
   };
 
-  const openQr = () => {
-    if (!connect.qrUrl) return;
-    navigate('/connection/qr', {
-      state: { url: connect.qrUrl, hideLink: connect.hideLink, subscriptionId: undefined },
-    });
-  };
-
   const onCopy = async () => {
     if (!connect.qrUrl) return;
     await copyToClipboard(connect.qrUrl);
@@ -94,7 +88,7 @@ export default function AddDevice() {
 
   return (
     <div className="og" style={{ paddingBottom: 120 }}>
-      <div className="og-eyebrow">{t('origami.add.eyebrow')}</div>
+      <div className="og-eyebrow">{t('origami.add.step')}</div>
       <h1 className="og-h1">{t('origami.add.title')}</h1>
       <p className="og-sm" style={{ marginTop: 8 }}>
         {t('origami.add.detected')}
@@ -136,10 +130,13 @@ export default function AddDevice() {
               <span className="og-dev-ico" aria-hidden="true">
                 {app.name.charAt(0).toUpperCase()}
               </span>
-              <span style={{ flex: 1, textAlign: 'left' }}>
-                <b>{app.name}</b>
+              <span style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+                <b className="og-opt-name">{app.name}</b>
                 {recommended && (
                   <span className="og-tag og-tag-accent">{t('origami.add.recommended')}</span>
+                )}
+                {findAddLink(app, connect.config?.subscriptionUrl ?? null) && (
+                  <span className="og-sm og-opt-sub">{t('origami.add.oneTap')}</span>
                 )}
               </span>
               <span className="og-radio" aria-hidden="true" data-on={selected || undefined} />
@@ -173,10 +170,19 @@ export default function AddDevice() {
         </div>
       )}
 
-      <div className="og-row og-row-start" style={{ marginTop: 18, gap: 20 }}>
+      {connect.qrUrl && (
+        <div className="og-row og-row-start og-qr-row">
+          <div className="og-qr" aria-hidden="true">
+            <QRCodeSVG value={connect.qrUrl} size={96} level="M" />
+          </div>
+          <div className="og-sm">{t('origami.add.qrText')}</div>
+        </div>
+      )}
+
+      <div className="og-row og-row-start" style={{ marginTop: 16, gap: 10 }}>
         {connect.installUrl && (
           <a
-            className="og-link"
+            className="og-btn og-btn-sm og-btn-flat"
             href={connect.installUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -184,13 +190,8 @@ export default function AddDevice() {
             {t('origami.add.notInstalled')}
           </a>
         )}
-        {connect.qrUrl && (
-          <button type="button" className="og-link" onClick={openQr}>
-            {t('origami.add.qr')}
-          </button>
-        )}
         {connect.qrUrl && !connect.hideLink && (
-          <button type="button" className="og-link" onClick={onCopy}>
+          <button type="button" className="og-btn og-btn-sm og-btn-flat" onClick={onCopy}>
             {copied ? t('origami.add.copied') : t('origami.add.copy')}
           </button>
         )}

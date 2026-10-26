@@ -1,3 +1,5 @@
+import { ORIGAMI_SHELL } from '@/origami/shell/config';
+import OrigamiShell from '@/origami/shell/OrigamiShell';
 import { AppShell } from './AppShell';
 
 interface LayoutProps {
@@ -13,5 +15,5 @@ interface LayoutProps {
  * - Platform-aware features (Telegram integration)
  */
 export default function Layout({ children }: LayoutProps) {
-  return <AppShell>{children}</AppShell>;
+  return ORIGAMI_SHELL ? <OrigamiShell>{children}</OrigamiShell> : <AppShell>{children}</AppShell>;
 }

@@ -8,6 +8,8 @@ import { useCurrency } from '@/hooks/useCurrency';
 import { useAuthStore } from '@/store/auth';
 import type { Subscription } from '@/types';
 import { displayName } from '@/utils/displayName';
+import { HelpBlock, SummaryStrip } from './blocks';
+import { daysSince, relativeDaysAgo, trafficPercentLabel } from './format';
 
 /** Главная, когда подписка закончилась: одно действие (продлить), без мастера. */
 export default function RenewHome({ subscription }: { subscription: Subscription }) {
@@ -27,13 +29,9 @@ export default function RenewHome({ subscription }: { subscription: Subscription
     staleTime: API.BALANCE_STALE_TIME_MS,
   });
 
-  const expired = subscription.end_date
-    ? new Date(subscription.end_date).toLocaleDateString(i18n.language)
-    : '';
-  const unlimited = !(subscription.traffic_limit_gb > 0);
-  const trafficPercent = unlimited
-    ? '-'
-    : `${Math.round(subscription.traffic_used_percent || (subscription.traffic_used_gb / subscription.traffic_limit_gb) * 100)}%`;
+  const ago = daysSince(subscription.end_date);
+  const expired = ago === null ? '' : relativeDaysAgo(ago, i18n.language);
+  const trafficLabel = trafficPercentLabel(subscription);
   const rubles = balance ? formatWithCurrency(balance.balance_rubles) : '-';
 
   return (
@@ -47,7 +45,7 @@ export default function RenewHome({ subscription }: { subscription: Subscription
         <div className="og-row">
           <span className="og-tag og-tag-warn">
             {expired
-              ? t('origami.renew.expired', { date: expired })
+              ? t('origami.renew.expired', { when: expired })
               : t('origami.renew.expiredNoDate')}
           </span>
           {subscription.tariff_name && (
@@ -69,37 +67,27 @@ export default function RenewHome({ subscription }: { subscription: Subscription
         </div>
       </section>
 
-      <div className="og-strip">
-        <div>
-          <div className="og-eyebrow">{t('origami.renew.balance')}</div>
-          <div className="og-strip-v">{rubles}</div>
-        </div>
-        <div>
-          <div className="og-eyebrow">{t('origami.renew.traffic')}</div>
-          <div className="og-strip-v">{trafficPercent}</div>
-        </div>
-        <div>
-          <div className="og-eyebrow">{t('origami.renew.devices')}</div>
-          <div className="og-strip-v">
-            {devices
+      <SummaryStrip
+        cells={[
+          { label: t('origami.renew.balance'), value: rubles },
+          { label: t('origami.renew.traffic'), value: trafficLabel },
+          {
+            label: t('origami.renew.devices'),
+            value: devices
               ? t('origami.summary.deviceLimit', {
                   used: devices.total,
                   limit: devices.device_limit,
                 })
-              : '-'}
-          </div>
-        </div>
-      </div>
+              : '-',
+          },
+        ]}
+      />
 
-      <div className="og-help">
-        <div>
-          <b>{t('origami.renew.helpTitle')}</b>
-          <div className="og-sm">{t('origami.renew.helpText')}</div>
-        </div>
-        <Link to="/support" className="og-btn og-btn-sm og-btn-ghost">
-          {t('origami.summary.helpButton')}
-        </Link>
-      </div>
+      <HelpBlock
+        title={t('origami.renew.helpTitle')}
+        text={t('origami.renew.helpText')}
+        button={t('origami.summary.helpButton')}
+      />
     </div>
   );
 }

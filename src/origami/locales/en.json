@@ -58,11 +58,13 @@
       "noDevices": "No devices in the list: your app may not report them to the panel.",
       "helpTitle": "Something broke?",
       "helpText": "Write to us, we reply in chat",
-      "helpButton": "Help"
+      "helpButton": "Help",
+      "daysWord_one": "day",
+      "daysWord_other": "days"
     },
     "renew": {
       "title": "Subscription expired",
-      "expired": "Expired {{date}}",
+      "expired": "Expired {{when}}",
       "expiredNoDate": "Expired",
       "text": "Renew and everything works as before. Your devices and settings are kept, no need to add the app again.",
       "extend": "Extend subscription",
@@ -76,7 +78,7 @@
     "add": {
       "eyebrow": "New device",
       "title": "Add the subscription",
-      "detected": "We detected your device. If it is a different one, choose below.",
+      "detected": "We detected your device. Choose an app:",
       "platforms": "Platform",
       "app": "App",
       "recommended": "recommended",
@@ -87,7 +89,25 @@
       "notInstalled": "The app is not installed",
       "qr": "Show QR code",
       "copy": "Copy link",
-      "copied": "Link copied"
+      "copied": "Link copied",
+      "step": "Step 2 of 3",
+      "oneTap": "One tap adds the subscription",
+      "qrText": "Connecting another device or a TV? Point the camera at the code."
+    },
+    "shell": {
+      "theme": "Theme",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "notifications": "Notifications",
+      "language": "Language"
+    },
+    "strip": {
+      "left": "Left",
+      "left_unit": "d."
+    },
+    "wizardHelp": {
+      "title": "Trouble connecting?",
+      "text": "Write to us, we reply in chat"
     }
   }
 }
