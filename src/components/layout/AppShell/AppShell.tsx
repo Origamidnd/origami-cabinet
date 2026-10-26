@@ -40,6 +40,7 @@ import {
 
 import { MobileBottomNav } from './MobileBottomNav';
 import { isMobileNavScreen, mobileNavItems } from './mobileNavRoutes';
+import { SHOW_MOBILE_BOTTOM_NAV } from '@/origami/shell/config';
 import { AppHeader } from './AppHeader';
 import { LogoutButton } from './LogoutButton';
 import { useBackgroundConsumer } from '@/components/backgrounds/BackgroundHost';
@@ -92,7 +93,7 @@ export function AppShell({ children }: AppShellProps) {
   // Нижняя панель живёт только на экранах своих кнопок; на остальных её нет и
   // место под неё не резервируется (data-mobile-nav="off" → --mobile-nav-clearance).
   const navItems = mobileNavItems({ wheelEnabled, referralEnabled, lite });
-  const showMobileNav = isMobileNavScreen(location.pathname, navItems);
+  const showMobileNav = SHOW_MOBILE_BOTTOM_NAV && isMobileNavScreen(location.pathname, navItems);
 
   // Desktop navigation — labels always visible (no hover-reveal gimmick)
   const desktopNav = [

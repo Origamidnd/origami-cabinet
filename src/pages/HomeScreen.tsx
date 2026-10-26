@@ -1,4 +1,5 @@
 import { useLiteMode } from '@/hooks/useLiteMode';
+import OrigamiHome from '@/origami/home/OrigamiHome';
 
 import Dashboard from './Dashboard';
 import DashboardLite from './DashboardLite';
@@ -15,5 +16,5 @@ import DashboardLite from './DashboardLite';
 export default function HomeScreen() {
   const { lite } = useLiteMode();
 
-  return lite ? <DashboardLite /> : <Dashboard />;
+  return <OrigamiHome stock={lite ? <DashboardLite /> : <Dashboard />} />;
 }

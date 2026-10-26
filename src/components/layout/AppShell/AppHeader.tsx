@@ -22,6 +22,7 @@ import { cn } from '@/lib/utils';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import TicketNotificationBell from '@/components/TicketNotificationBell';
 import { LogoutButton } from './LogoutButton';
+import MenuLabel from '@/origami/shell/MenuLabel';
 
 // Icons
 import {
@@ -278,7 +279,7 @@ export function AppHeader({
                   haptic.impact('light');
                   setMobileMenuOpen(!mobileMenuOpen);
                 }}
-                className={`rounded-xl p-2.5 transition-all duration-200 ${
+                className={`flex items-center gap-2 rounded-xl p-2.5 transition-all duration-200 ${
                   mobileMenuOpen
                     ? 'bg-dark-700 text-dark-100'
                     : 'text-dark-400 hover:bg-dark-800 hover:text-dark-100'
@@ -291,6 +292,7 @@ export function AppHeader({
                 ) : (
                   <MenuIcon className="h-6 w-6" />
                 )}
+                <MenuLabel />
               </button>
             </div>
           </div>

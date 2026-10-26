@@ -18,3 +18,14 @@ git fetch upstream --tags
 git merge v<версия>
 npm ci && npm run type-check && npm test && npm run build
 ```
+
+## Где что лежит
+Код форка живёт в `src/origami/`, в стоковых файлах только точки подключения.
+- `home/` - выбор состояния главной (`homeState.ts` с тестами, `useHomeState.ts`) и экраны: сводка, продление.
+- `wizard/` - мастер подключения и хранение его прогресса (localStorage и Telegram CloudStorage).
+- `connect/` - платформа по User-Agent, рекомендуемое приложение, ссылки установки и добавления подписки.
+- `pages/AddDevice.tsx` - экран «Добавить устройство» (маршрут `/add-device`).
+- `shell/` - подпись «Меню» в шапке и переключатель нижней панели (`SHOW_MOBILE_BOTTOM_NAV`).
+- `locales/` - тексты форка (ru, en), подмешиваются в i18next, стоковые словари не правятся.
+- `styles/origami.css` - стили экранов.
+Точки подключения в стоке: `pages/HomeScreen.tsx`, `App.tsx` (маршрут), `components/layout/AppShell/AppShell.tsx` и `AppHeader.tsx`.

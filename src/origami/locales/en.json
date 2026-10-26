@@ -1,0 +1,93 @@
+{
+  "origami": {
+    "common": {
+      "back": "Back",
+      "support": "Help",
+      "loading": "Loading...",
+      "menu": "Menu"
+    },
+    "wizard": {
+      "eyebrow": "Let's connect your VPN, {{name}}",
+      "eyebrowNoName": "Let's connect your VPN",
+      "title": "Step {{step}} of 3",
+      "now": "Now",
+      "dismiss": "I have already set everything up",
+      "notConfigured": "Connection apps are not configured yet. The detailed connection page lists the available options.",
+      "openConnection": "Open the connection page",
+      "step1": {
+        "title": "Install the app",
+        "done": "App installed",
+        "text": "You will need {{app}}: it is free and takes a minute to install.",
+        "install": "Install {{app}}",
+        "already": "The app is already installed",
+        "other": "Choose another app"
+      },
+      "step2": {
+        "title": "Add the subscription to {{app}}",
+        "done": "Subscription added",
+        "text": "Tap the button: the app opens and adds your key by itself. Nothing to copy.",
+        "add": "Add to {{app}}",
+        "qr": "Show a QR code for another device",
+        "notInstalled": "The app is not installed"
+      },
+      "step3": {
+        "title": "Check the connection",
+        "text": "In {{app}} tap \"Connect\". As soon as your device appears in the list, we will see it.",
+        "waiting": "Waiting for your device...",
+        "check": "Check now",
+        "slow": "The device has not appeared yet. Trouble connecting?",
+        "support": "Contact support",
+        "again": "Add the subscription again"
+      }
+    },
+    "summary": {
+      "title": "Everything works",
+      "eyebrow": "Welcome, {{name}}",
+      "eyebrowNoName": "Welcome",
+      "active": "Active",
+      "trial": "Trial",
+      "tariff": "Plan {{name}}",
+      "days": "d.",
+      "until": "valid until {{date}}",
+      "traffic": "Traffic",
+      "unlimited": "unlimited",
+      "extend": "Extend subscription",
+      "addDevice": "Add a device",
+      "devices": "Devices",
+      "deviceLimit": "{{used}} of {{limit}}",
+      "noDevices": "No devices in the list: your app may not report them to the panel.",
+      "helpTitle": "Something broke?",
+      "helpText": "Write to us, we reply in chat",
+      "helpButton": "Help"
+    },
+    "renew": {
+      "title": "Subscription expired",
+      "expired": "Expired {{date}}",
+      "expiredNoDate": "Expired",
+      "text": "Renew and everything works as before. Your devices and settings are kept, no need to add the app again.",
+      "extend": "Extend subscription",
+      "changePlan": "Change plan",
+      "balance": "Balance",
+      "traffic": "Traffic",
+      "devices": "Devices",
+      "helpTitle": "Payment questions?",
+      "helpText": "Write to us, we reply in chat"
+    },
+    "add": {
+      "eyebrow": "New device",
+      "title": "Add the subscription",
+      "detected": "We detected your device. If it is a different one, choose below.",
+      "platforms": "Platform",
+      "app": "App",
+      "recommended": "recommended",
+      "whatHappens": "What happens next",
+      "whatHappensText": "{{app}} opens and asks \"Add subscription?\". Tap \"Add\", then \"Connect\".",
+      "connected": "Device connected",
+      "done": "Done",
+      "notInstalled": "The app is not installed",
+      "qr": "Show QR code",
+      "copy": "Copy link",
+      "copied": "Link copied"
+    }
+  }
+}
