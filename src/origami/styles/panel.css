@@ -79,6 +79,19 @@
   flex: 1;
   text-align: center;
 }
+/* Выпадающие окна колокольчика и языка: колонка прокручивается и обрезает absolute-потомков,
+   поэтому открываем их рядом с колонкой на фиксированном месте */
+.og-side-tools .relative > div {
+  position: fixed;
+  top: auto !important;
+  right: auto;
+  bottom: 12px;
+  left: calc(var(--og-side-w) + 12px);
+  margin: 0;
+}
+.og-side-tools .relative > div.sm\:w-96 {
+  width: min(24rem, calc(100vw - var(--og-side-w) - 24px));
+}
 .og-icon-btn {
   display: grid;
   place-items: center;
