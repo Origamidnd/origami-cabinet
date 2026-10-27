@@ -152,7 +152,13 @@
       "friends": "Friends",
       "friendsActive": "active {{count}}",
       "friendsEarned": "Earned {{earned}}, {{percent}}% of payments",
-      "invite": "Invite a friend"
+      "invite": "Invite a friend",
+      "trafficChart": "Traffic for 14 days",
+      "servers": "Servers",
+      "serversOnline": "{{online}} of {{total}} online",
+      "serverOff": "offline",
+      "serverOn": "online",
+      "pingMs": "{{ms}} ms"
     },
     "sheet": {
       "eyebrow": "New device",
@@ -170,6 +176,29 @@
       "step3": {
         "title": "Tap \"Connect\"",
         "text": "Trouble?"
+      }
+    },
+    "topup": {
+      "eyebrow": "Balance {{balance}}",
+      "title": "Top up balance"
+    },
+    "login": {
+      "inside": "Inside your account",
+      "status": {
+        "title": "Subscription and traffic",
+        "text": "Days and gigabytes left, renewal in one tap"
+      },
+      "servers": {
+        "title": "Servers",
+        "text": "Which locations are up right now and how fast"
+      },
+      "devices": {
+        "title": "Devices",
+        "text": "Connect a new one in a couple of minutes or remove an old one"
+      },
+      "balance": {
+        "title": "Balance and friends",
+        "text": "Top-ups, payment history and referral bonuses"
       }
     }
   }

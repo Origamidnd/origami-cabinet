@@ -188,3 +188,42 @@ describe('обзор: блок помощи', () => {
     expect(screen.getByTestId('og-help').querySelector('a')?.getAttribute('href')).toBe('/support');
   });
 });
+
+describe('обзор: серверы и график трафика со страницы подписки', () => {
+  const extras = {
+    servers: [
+      { name: '🇸🇪 Швеция', online: false, pingMs: null },
+      { name: '🇩🇪 Германия', online: true, pingMs: 37 },
+      { name: '🇫🇮 Финляндия', online: true, pingMs: 12 },
+    ],
+    traffic: [0, 5, 3, 9, 2, 0, 4, 7, 1, 6, 8, 2, 3, 5],
+  };
+
+  it('виджет «Серверы»: сначала в сети по пингу, без связи в конце; ряд из трёх', () => {
+    view({ extras });
+    const widget = screen.getByTestId('widget-servers');
+    const rows = [...widget.querySelectorAll('li')].map((li) => li.textContent);
+    expect(rows).toEqual([
+      '🇫🇮 Финляндияorigami.overview.pingMs',
+      '🇩🇪 Германияorigami.overview.pingMs',
+      '🇸🇪 Швецияorigami.overview.serverOff',
+    ]);
+    expect(widget.parentElement?.className).toBe('og-grid3');
+  });
+
+  it('график трафика рисуется в виджете «Трафик»', () => {
+    view({ extras });
+    expect(
+      screen.getByTestId('widget-traffic').querySelector('[data-testid="traffic-spark"]'),
+    ).toBeTruthy();
+  });
+
+  it('без друзей - ряд из двух; пустые данные - ни виджета, ни графика', () => {
+    view({ extras, referral: null });
+    expect(screen.getByTestId('widget-servers').parentElement?.className.trim()).toBe('og-grid2');
+    cleanup();
+    view({ extras: { servers: [], traffic: [0, 0] } });
+    expect(document.querySelector('[data-testid="widget-servers"]')).toBeNull();
+    expect(document.querySelector('[data-testid="traffic-spark"]')).toBeNull();
+  });
+});

@@ -5,6 +5,8 @@ import type { Subscription } from '@/types';
 import { HelpBlock } from '../home/blocks';
 import { daysSince, longDate, relativeDaysAgo, trafficPercent } from '../home/format';
 import { registerOrigamiLocales } from '../i18n';
+import Sparkline from '@/components/dashboard/Sparkline';
+import { type LkExtras, sortServers } from './extras';
 
 registerOrigamiLocales();
 
@@ -35,6 +37,8 @@ export interface OverviewProps {
   balanceText: string | null;
   /** `null`: реферальная программа выключена, виджет «Друзья» не показываем. */
   referral: OverviewReferral | null;
+  /** Серверы и трафик по дням со страницы подписки; null - данных нет, виджет «Серверы» и график не показываем. */
+  extras?: LkExtras | null;
   onConnect: () => void;
   onDismiss: () => void;
 }
@@ -45,8 +49,8 @@ function deviceTitle(d: OverviewDevice): string {
 
 /**
  * Обзор панели: блок «Давайте подключим VPN» (если устройств ещё нет), ряд из четырёх виджетов
- * (подписка, трафик, устройства, баланс), ряд из двух (мои устройства, друзья) и блок помощи.
- * Виджет «Серверы» и график трафика не делаем: в API кабинета для них нет данных.
+ * (подписка, трафик с графиком за 14 дней, устройства, баланс), ряд из трёх (серверы, мои устройства,
+ * друзья) и блок помощи. Серверы и график берутся со страницы подписки (`extras`); нет данных - их нет.
  */
 export default function OverviewWidgets({
   state,
@@ -56,6 +60,7 @@ export default function OverviewWidgets({
   devices,
   balanceText,
   referral,
+  extras = null,
   onConnect,
   onDismiss,
 }: OverviewProps) {
@@ -67,6 +72,10 @@ export default function OverviewWidgets({
   const unlimited = !(sub.traffic_limit_gb > 0);
   const ago = daysSince(sub.end_date);
   const until = longDate(sub.end_date, lang);
+  const spark = extras ? extras.traffic.length >= 2 && extras.traffic.some((b) => b > 0) : false;
+  const servers = extras && extras.servers.length > 0 ? sortServers(extras.servers) : null;
+  const onlineCount = extras ? extras.servers.filter((s) => s.online).length : 0;
+  const row2 = 1 + (servers ? 1 : 0) + (referral ? 1 : 0);
 
   const devicesSub =
     total === 0
@@ -156,6 +165,21 @@ export default function OverviewWidgets({
               </small>
             )}
           </div>
+          {spark && (
+            <div
+              className="og-spark"
+              role="img"
+              aria-label={t('origami.overview.trafficChart')}
+              data-testid="traffic-spark"
+            >
+              <Sparkline
+                data={extras?.traffic ?? []}
+                width={200}
+                height={56}
+                color="currentColor"
+              />
+            </div>
+          )}
           {!unlimited && (
             <div className="og-meter" role="presentation">
               <i style={{ width: `${trafficPercent(sub)}%` }} />
@@ -204,7 +228,38 @@ export default function OverviewWidgets({
         </section>
       </div>
 
-      <div className={`og-grid2 ${referral ? '' : 'og-grid2-one'}`}>
+      <div className={row2 === 3 ? 'og-grid3' : `og-grid2 ${row2 === 1 ? 'og-grid2-one' : ''}`}>
+        {servers && (
+          <section className="og-w" data-testid="widget-servers">
+            <div className="og-w-head">
+              <span className="og-eyebrow">{t('origami.overview.servers')}</span>
+              <span className="og-mono og-w-note">
+                {t('origami.overview.serversOnline', {
+                  online: onlineCount,
+                  total: extras?.servers.length ?? 0,
+                })}
+              </span>
+            </div>
+            <ul className="og-srv">
+              {servers.map((s) => (
+                <li key={s.name}>
+                  <span
+                    className={`og-srv-dot ${s.online ? '' : 'og-srv-off'}`}
+                    aria-hidden="true"
+                  />
+                  <span className="og-srv-name">{s.name}</span>
+                  <span className="og-mono og-srv-ping">
+                    {!s.online
+                      ? t('origami.overview.serverOff')
+                      : s.pingMs !== null
+                        ? t('origami.overview.pingMs', { ms: s.pingMs })
+                        : t('origami.overview.serverOn')}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
         <section className="og-w" data-testid="widget-my-devices">
           <div className="og-w-head">
             <span className="og-eyebrow">{t('origami.overview.myDevices')}</span>

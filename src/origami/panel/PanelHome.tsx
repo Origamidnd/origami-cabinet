@@ -14,6 +14,7 @@ import { displayName } from '@/utils/displayName';
 import { useHomeState } from '../home/useHomeState';
 import { useWizardProgress } from '../wizard/useWizardProgress';
 import OverviewWidgets from './OverviewWidgets';
+import { useLkExtras } from './useLkExtras';
 import '../styles/origami.css';
 import '../styles/panel.css';
 
@@ -57,6 +58,9 @@ export default function PanelHome({ stock }: { stock: ReactNode }) {
     retry: false,
   });
 
+  // Серверы и трафик по дням со страницы подписки (хук до ранних return).
+  const extras = useLkExtras(active ? subResponse?.subscription?.subscription_url : null);
+
   if (state === 'stock') return <>{stock}</>;
   const subscription = subResponse?.subscription ?? null;
   if (state === 'loading' || !subscription) return <PageSkeleton />;
@@ -69,6 +73,7 @@ export default function PanelHome({ stock }: { stock: ReactNode }) {
       subscription={subscription}
       devices={devices}
       balanceText={balance ? formatWithCurrency(balance.balance_rubles) : null}
+      extras={extras}
       referral={
         referralEnabled && referral
           ? {

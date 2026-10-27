@@ -33,6 +33,7 @@ import { useLegalConsentGate } from '../hooks/useLegalConsentGate';
 import { infoApi } from '../api/info';
 import type { LegalConsentConfig } from '../types';
 import { safeLocal, safeSession } from '../utils/safeStorage';
+import OrigamiLoginAside from '../origami/login/LoginAside';
 
 export default function Login() {
   const { t, i18n } = useTranslation();
@@ -835,6 +836,7 @@ export default function Login() {
         )}
         {footerEnabled && <LegalFooter className="pt-1" />}
       </div>
+      <OrigamiLoginAside />
     </div>
   );
 }

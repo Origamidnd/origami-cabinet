@@ -57,6 +57,7 @@ import OAuthCallback from './pages/OAuthCallback';
 // HomeScreen выбирает между полным и простым видом по настройке оператора.
 import HomeScreen from './pages/HomeScreen';
 
+import OrigamiTopUp from './origami/pages/TopUp';
 // User pages - lazy load
 const Subscriptions = lazyWithRetry(() => import('./pages/Subscriptions'));
 // Развилка простого и полного вида страницы подписки (оба экрана внутри ленивые).
@@ -444,7 +445,9 @@ function App() {
           element={
             <ProtectedRoute>
               <LazyPage>
-                <TopUpMethodSelect />
+                <OrigamiTopUp>
+                  <TopUpMethodSelect />
+                </OrigamiTopUp>
               </LazyPage>
             </ProtectedRoute>
           }
@@ -476,7 +479,9 @@ function App() {
           element={
             <ProtectedRoute>
               <LazyPage>
-                <TopUpAmount />
+                <OrigamiTopUp>
+                  <TopUpAmount />
+                </OrigamiTopUp>
               </LazyPage>
             </ProtectedRoute>
           }
