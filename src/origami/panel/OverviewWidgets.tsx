@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { PlusIcon } from '@/components/icons';
@@ -52,6 +53,9 @@ function deviceTitle(d: OverviewDevice): string {
  * (подписка, трафик с графиком за 14 дней, устройства, баланс), ряд из трёх (серверы, мои устройства,
  * друзья) и блок помощи. Серверы и график берутся со страницы подписки (`extras`); нет данных - их нет.
  */
+/** Сколько серверов видно в виджете до «Показать все». */
+const SERVERS_SHOWN = 6;
+
 export default function OverviewWidgets({
   state,
   name,
@@ -73,7 +77,9 @@ export default function OverviewWidgets({
   const ago = daysSince(sub.end_date);
   const until = longDate(sub.end_date, lang);
   const spark = extras ? extras.traffic.length >= 2 && extras.traffic.some((b) => b > 0) : false;
-  const servers = extras && extras.servers.length > 0 ? sortServers(extras.servers) : null;
+  const [allServers, setAllServers] = useState(false);
+  const sorted = extras && extras.servers.length > 0 ? sortServers(extras.servers, Infinity) : null;
+  const servers = sorted && (allServers ? sorted : sorted.slice(0, SERVERS_SHOWN));
   const onlineCount = extras ? extras.servers.filter((s) => s.online).length : 0;
   const row2 = 1 + (servers ? 1 : 0) + (referral ? 1 : 0);
 
@@ -258,6 +264,19 @@ export default function OverviewWidgets({
                 </li>
               ))}
             </ul>
+            {sorted && sorted.length > SERVERS_SHOWN && (
+              <button
+                type="button"
+                className="og-link og-srv-more"
+                data-testid="servers-toggle"
+                aria-expanded={allServers}
+                onClick={() => setAllServers((v) => !v)}
+              >
+                {allServers
+                  ? t('origami.overview.serversLess')
+                  : t('origami.overview.serversAll', { count: sorted.length })}
+              </button>
+            )}
           </section>
         )}
         <section className="og-w" data-testid="widget-my-devices">

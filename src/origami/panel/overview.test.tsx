@@ -211,6 +211,27 @@ describe('обзор: серверы и график трафика со стр�
     expect(widget.parentElement?.className).toBe('og-grid3');
   });
 
+  it('серверов больше шести - видно шесть и кнопка «Показать все», по ней все и «Свернуть»', () => {
+    const many = Array.from({ length: 9 }, (_, i) => ({
+      name: `S${i}`,
+      online: true,
+      pingMs: null,
+    }));
+    view({ extras: { servers: many, traffic: extras.traffic } });
+    const widget = screen.getByTestId('widget-servers');
+    expect(widget.querySelectorAll('li')).toHaveLength(6);
+    const toggle = screen.getByTestId('servers-toggle');
+    expect(toggle.textContent).toBe('origami.overview.serversAll');
+    fireEvent.click(toggle);
+    expect(widget.querySelectorAll('li')).toHaveLength(9);
+    expect(screen.getByTestId('servers-toggle').textContent).toBe('origami.overview.serversLess');
+  });
+
+  it('шесть и меньше - без кнопки', () => {
+    view({ extras });
+    expect(screen.queryByTestId('servers-toggle')).toBeNull();
+  });
+
   it('график трафика рисуется в виджете «Трафик»', () => {
     view({ extras });
     expect(

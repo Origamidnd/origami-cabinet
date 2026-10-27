@@ -160,6 +160,8 @@
       "serversOnline": "в сети {{online}} из {{total}}",
       "serverOff": "нет связи",
       "serverOn": "в сети",
+      "serversAll": "Показать все ({{count}})",
+      "serversLess": "Свернуть",
       "pingMs": "{{ms}} мс"
     },
     "sheet": {

@@ -158,6 +158,8 @@
       "serversOnline": "{{online}} of {{total}} online",
       "serverOff": "offline",
       "serverOn": "online",
+      "serversAll": "Show all ({{count}})",
+      "serversLess": "Show less",
       "pingMs": "{{ms}} ms"
     },
     "sheet": {
