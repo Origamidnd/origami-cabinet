@@ -32,6 +32,7 @@ import { themeColorsQueryOptions } from './api/themeColors';
 import { applyThemeColors } from './hooks/useThemeColors';
 import { readThemeColorsHint } from './utils/themeColorsHint';
 import { UI } from './config/constants';
+import './origami/fonts';
 import './styles/globals.css';
 
 // Harden the global encoders against lone UTF-16 surrogates (truncated emoji in
