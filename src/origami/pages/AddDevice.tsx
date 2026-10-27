@@ -9,6 +9,8 @@ import { copyToClipboard } from '@/utils/clipboard';
 import { appId, findAddLink, localized, recommendedApp } from '../connect/connectModel';
 import { useConnect } from '../connect/useConnect';
 import { registerOrigamiLocales } from '../i18n';
+import PanelAddDevice from '../panel/PanelAddDevice';
+import { ORIGAMI_SHELL } from '../shell/config';
 import { useWizardProgress } from '../wizard/useWizardProgress';
 import '../styles/origami.css';
 
@@ -21,6 +23,10 @@ const POLL_INTERVAL_MS = 4000;
  * приложение выбрано рекомендуемое, внизу одна главная кнопка. QR и ссылка нужны для другого устройства.
  */
 export default function AddDevice() {
+  return ORIGAMI_SHELL === 'panel' ? <PanelAddDevice /> : <StepsAddDevice />;
+}
+
+function StepsAddDevice() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { capabilities, backButton } = usePlatform();

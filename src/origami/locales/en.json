@@ -108,6 +108,66 @@
     "wizardHelp": {
       "title": "Trouble connecting?",
       "text": "Write to us, we reply in chat"
+    },
+    "panel": {
+      "overview": "Overview",
+      "devices": "Devices",
+      "help": "Help",
+      "more": "More",
+      "balance": "Balance",
+      "topup": "Top up",
+      "navigation": "Main navigation"
+    },
+    "overview": {
+      "eyebrow": "Good day, {{name}}",
+      "eyebrowNoName": "Good day",
+      "title": "Overview",
+      "connect": {
+        "eyebrow": "First connection",
+        "title": "Let's connect your VPN",
+        "text": "Your subscription is active, but no device has connected yet. It takes a couple of minutes: choose an app and add the subscription.",
+        "button": "Connect a device",
+        "short": "Connect"
+      },
+      "subscription": "Subscription",
+      "active": "active",
+      "trial": "trial",
+      "expiredTitle": "Expired",
+      "changePlan": "Change plan",
+      "extend": "Extend",
+      "traffic": "Traffic",
+      "trafficUsed": "{{pct}}% used",
+      "devices": "Devices",
+      "of": "of {{limit}}",
+      "devicesFree": "Free slots: {{count}}",
+      "devicesNone": "No devices yet",
+      "devicesFull": "Limit reached",
+      "balance": "Balance",
+      "topup": "Top up",
+      "myDevices": "My devices",
+      "all": "All",
+      "friends": "Friends",
+      "friendsActive": "active {{count}}",
+      "friendsEarned": "Earned {{earned}}, {{percent}}% of payments",
+      "invite": "Invite a friend"
+    },
+    "sheet": {
+      "eyebrow": "New device",
+      "title": "Connect a device",
+      "close": "Close",
+      "step1": {
+        "title": "Install {{app}}",
+        "text": "Free from the app store.",
+        "button": "Open the store"
+      },
+      "step2": {
+        "title": "Add the subscription",
+        "text": "{{app}} opens and adds the key."
+      },
+      "step3": {
+        "title": "Tap \"Connect\"",
+        "text": "Trouble?"
+      }
     }
   }
 }

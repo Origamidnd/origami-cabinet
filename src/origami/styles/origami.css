@@ -362,7 +362,7 @@
   cursor: pointer;
 }
 .og-chip-on {
-  background: rgb(var(--color-accent-500) / 0.18);
+  background: rgba(var(--color-accent-500), 0.18);
   border-color: rgb(var(--color-accent-400));
   box-shadow: 3px 3px 0 var(--og-shadow);
 }
@@ -381,7 +381,7 @@
 }
 .og-opt-on {
   border-color: rgb(var(--color-accent-400));
-  background: rgb(var(--color-accent-500) / 0.14);
+  background: rgba(var(--color-accent-500), 0.14);
   box-shadow: 4px 4px 0 var(--og-shadow);
 }
 .og-opt .og-tag {
@@ -638,6 +638,8 @@
 .og-qr-row {
   margin-top: 20px;
   gap: 16px;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 .og-qr {
   padding: 8px;

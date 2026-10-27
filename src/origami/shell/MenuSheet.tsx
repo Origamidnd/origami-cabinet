@@ -21,6 +21,8 @@ export interface MenuSheetProps {
   onLogout: () => void;
   /** Верхний отступ листа (высота шапки). */
   top: string;
+  /** Нижний отступ листа (высота нижней панели), по умолчанию 0. */
+  bottom?: string;
   /** Колокольчик уведомлений: стоковый компонент должен быть смонтирован всегда, он показывает тосты. */
   notifications?: ReactNode;
   language?: ReactNode;
@@ -42,6 +44,7 @@ export default function MenuSheet({
   canLogout,
   onLogout,
   top,
+  bottom,
   notifications,
   language,
 }: MenuSheetProps) {
@@ -74,7 +77,7 @@ export default function MenuSheet({
     <div
       id={id}
       className="og-sheet"
-      style={{ top }}
+      style={{ top, bottom }}
       hidden={!open}
       role="dialog"
       aria-label={t('origami.common.menu')}

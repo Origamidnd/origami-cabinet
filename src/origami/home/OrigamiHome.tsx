@@ -4,6 +4,8 @@ import { subscriptionApi } from '@/api/subscription';
 import { API } from '@/config/constants';
 import { PageSkeleton } from '@/components/ui/skeleton';
 import { registerOrigamiLocales } from '../i18n';
+import PanelHome from '../panel/PanelHome';
+import { ORIGAMI_SHELL } from '../shell/config';
 import WizardHome from '../wizard/WizardHome';
 import RenewHome from './RenewHome';
 import SummaryHome from './SummaryHome';
@@ -17,6 +19,11 @@ registerOrigamiLocales();
  * отдаёт стоковый экран, который передаёт `HomeScreen`.
  */
 export default function OrigamiHome({ stock }: { stock: ReactNode }) {
+  return ORIGAMI_SHELL === 'panel' ? <PanelHome stock={stock} /> : <StepsHome stock={stock} />;
+}
+
+/** Главная оболочки 05: мастер, сводка, продление. */
+function StepsHome({ stock }: { stock: ReactNode }) {
   const { state } = useHomeState();
   // Тот же запрос, что в хуке состояния: ответ берётся из кэша, отдельной сети нет.
   const { data } = useQuery({
