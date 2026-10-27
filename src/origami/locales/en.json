@@ -92,7 +92,10 @@
       "copied": "Link copied",
       "step": "Step 2 of 3",
       "oneTap": "One tap adds the subscription",
-      "qrText": "Connecting another device or a TV? Point the camera at the code."
+      "qrText": "Connecting another device or a TV? Point the camera at the code.",
+      "qrOpen": "Show the QR code full size",
+      "qrHint": "Point the camera at the code. Tap to close.",
+      "qrClose": "Close"
     },
     "shell": {
       "theme": "Theme",

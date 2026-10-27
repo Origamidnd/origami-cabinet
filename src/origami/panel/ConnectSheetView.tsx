@@ -1,8 +1,8 @@
-import { QRCodeSVG } from 'qrcode.react';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { CloseIcon } from '@/components/icons';
+import { QrZoom } from '../connect/QrZoom';
 import { registerOrigamiLocales } from '../i18n';
 import { useFocusTrap } from './useFocusTrap';
 
@@ -209,9 +209,7 @@ export default function ConnectSheetView(props: ConnectSheetViewProps) {
 
             {props.qrUrl && (
               <div className="og-row og-row-start og-qr-row">
-                <div className="og-qr" aria-hidden="true">
-                  <QRCodeSVG value={props.qrUrl} size={96} level="M" />
-                </div>
+                <QrZoom value={props.qrUrl} />
                 <div className="og-sm">{t('origami.add.qrText')}</div>
               </div>
             )}

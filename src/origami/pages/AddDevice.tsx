@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { QRCodeSVG } from 'qrcode.react';
 import { Link, useNavigate } from 'react-router';
 import { subscriptionApi } from '@/api/subscription';
 import { usePlatform } from '@/platform';
 import { copyToClipboard } from '@/utils/clipboard';
 import { appId, findAddLink, localized, recommendedApp } from '../connect/connectModel';
+import { QrZoom } from '../connect/QrZoom';
 import { useConnect } from '../connect/useConnect';
 import { registerOrigamiLocales } from '../i18n';
 import PanelAddDevice from '../panel/PanelAddDevice';
@@ -178,9 +178,7 @@ function StepsAddDevice() {
 
       {connect.qrUrl && (
         <div className="og-row og-row-start og-qr-row">
-          <div className="og-qr" aria-hidden="true">
-            <QRCodeSVG value={connect.qrUrl} size={96} level="M" />
-          </div>
+          <QrZoom value={connect.qrUrl} />
           <div className="og-sm">{t('origami.add.qrText')}</div>
         </div>
       )}
