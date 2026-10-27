@@ -28,7 +28,10 @@ export interface ConnectSheetViewProps {
   appName: string;
   /** Текущий шаг мастера: 1 - установить, 2 - добавить подписку, 3 - проверить. */
   step: 1 | 2 | 3;
-  installUrl: string | null;
+  /** Ссылки установки с подписями из конфига (как на странице подписки). */
+  installLinks: { url: string; label: string }[];
+  /** Описание шага установки из конфига; пусто - текст по умолчанию. */
+  installText: string;
   onInstall: () => void;
   canAdd: boolean;
   onAdd: () => void;
@@ -147,17 +150,22 @@ export default function ConnectSheetView(props: ConnectSheetViewProps) {
                 <span className="og-snum">{step > 1 ? '✓' : 1}</span>
                 <div style={{ flex: 1 }}>
                   <b>{t('origami.sheet.step1.title', { app: props.appName })}</b>
-                  <div className="og-sm">{t('origami.sheet.step1.text')}</div>
-                  {props.installUrl && (
-                    <a
-                      className="og-btn og-btn-sm og-btn-ghost"
-                      href={props.installUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={props.onInstall}
-                    >
-                      {t('origami.sheet.step1.button')}
-                    </a>
+                  <div className="og-sm">{props.installText || t('origami.sheet.step1.text')}</div>
+                  {props.installLinks.length > 0 && (
+                    <div className="og-install-links" data-testid="install-links">
+                      {props.installLinks.map((link) => (
+                        <a
+                          key={link.url}
+                          className="og-btn og-btn-sm og-btn-ghost"
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={props.onInstall}
+                        >
+                          {link.label || t('origami.sheet.step1.button')}
+                        </a>
+                      ))}
+                    </div>
                   )}
                 </div>
               </li>

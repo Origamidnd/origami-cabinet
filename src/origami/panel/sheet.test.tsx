@@ -44,7 +44,8 @@ function props(patch: Partial<ConnectSheetViewProps> = {}): ConnectSheetViewProp
     onApp: vi.fn(),
     appName: 'INCY',
     step: 1,
-    installUrl: 'https://store.example.test/incy',
+    installLinks: [{ url: 'https://store.example.test/incy', label: 'App Store' }],
+    installText: '',
     onInstall: vi.fn(),
     canAdd: true,
     onAdd: vi.fn(),
@@ -71,6 +72,22 @@ function open(patch: Partial<ConnectSheetViewProps> = {}) {
 }
 
 describe('штора «Подключить устройство»', () => {
+  it('шаг установки: кнопка на каждую ссылку с подписью из конфига, без подписи - «Скачать»', () => {
+    open({
+      installLinks: [
+        { url: 'https://x.test/a.deb', label: '.deb (Ubuntu/Debian)' },
+        { url: 'https://x.test/a.rpm', label: '' },
+      ],
+      installText: 'Скачайте Happ с GitHub',
+    });
+    const links = [...screen.getByTestId('install-links').querySelectorAll('a')];
+    expect(links.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([
+      ['.deb (Ubuntu/Debian)', 'https://x.test/a.deb'],
+      ['origami.sheet.step1.button', 'https://x.test/a.rpm'],
+    ]);
+    expect(screen.getByText('Скачайте Happ с GitHub')).toBeTruthy();
+  });
+
   it('диалог: aria-modal, подпись, фокус внутри', () => {
     open();
     const dialog = screen.getByRole('dialog');
@@ -118,9 +135,9 @@ describe('штора «Подключить устройство»', () => {
     expect(screen.getByRole('radio', { name: /INCY/ }).getAttribute('aria-checked')).toBe('true');
   });
 
-  it('три шага: «Открыть магазин» и «Добавить» зовут свои обработчики', () => {
+  it('три шага: «Скачать» и «Добавить» зовут свои обработчики', () => {
     const { p } = open();
-    fireEvent.click(screen.getByText('origami.sheet.step1.button'));
+    fireEvent.click(screen.getByText('App Store'));
     fireEvent.click(screen.getByText('origami.wizard.step2.add'));
     expect(p.onInstall).toHaveBeenCalledTimes(1);
     expect(p.onAdd).toHaveBeenCalledTimes(1);

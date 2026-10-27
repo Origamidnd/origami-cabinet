@@ -14,7 +14,9 @@ import {
   appId,
   detectPlatform,
   findAddLink,
+  findInstall,
   findInstallUrl,
+  type InstallLink,
   orderPlatforms,
   recommendedApp,
 } from './connectModel';
@@ -30,6 +32,9 @@ export interface ConnectModel {
   app: RemnawaveAppClient | null;
   setApp: (app: RemnawaveAppClient) => void;
   installUrl: string | null;
+  /** Все ссылки установки с подписями и описание шага установки из конфига. */
+  installLinks: InstallLink[];
+  installText: string;
   /** Адрес для QR и кнопки копирования (учитывает режим Happ cryptolink). */
   qrUrl: string | null;
   hideLink: boolean;
@@ -82,6 +87,7 @@ export function useConnect(subscriptionId?: number): ConnectModel {
   );
   const app = platform ? recommendedApp(platform, apps, progress.appId) : null;
   const installUrl = findInstallUrl(app);
+  const install = findInstall(app, i18n.language);
 
   const qrUrl = useMemo(
     () =>
@@ -156,6 +162,8 @@ export function useConnect(subscriptionId?: number): ConnectModel {
     app,
     setApp: (next) => update({ appId: appId(next) }),
     installUrl,
+    installLinks: install.links,
+    installText: install.text,
     qrUrl,
     hideLink: link?.hide_link ?? config?.hideLink ?? false,
     config,

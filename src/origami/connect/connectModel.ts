@@ -89,6 +89,35 @@ export function findInstallUrl(app: RemnawaveAppClient | null): string | null {
   return null;
 }
 
+export interface InstallLink {
+  url: string;
+  /** Подпись кнопки из конфига («Скачать для Windows», «.deb (Ubuntu/Debian)»), пусто - подпись по умолчанию. */
+  label: string;
+}
+
+/**
+ * Все ссылки установки приложения (кнопки-ссылки блока установки) с подписями, как на странице подписки:
+ * у одного приложения их может быть несколько (.deb, .rpm, .pkg). Описание блока - текст шага, если задан.
+ */
+export function findInstall(
+  app: RemnawaveAppClient | null,
+  lang: string | undefined,
+): { links: InstallLink[]; text: string } {
+  if (!app) return { links: [], text: '' };
+  for (const block of app.blocks ?? []) {
+    const links: InstallLink[] = [];
+    for (const button of block.buttons ?? []) {
+      if (button.type === 'subscriptionLink' || button.type === 'copyButton') continue;
+      const url = button.resolvedUrl ?? button.url ?? button.link;
+      if (isWebUrl(url) && !/\{\{[A-Z0-9_]+\}\}/.test(url)) {
+        links.push({ url, label: localized(button.text, lang) });
+      }
+    }
+    if (links.length > 0) return { links, text: localized(block.description, lang) };
+  }
+  return { links: [], text: '' };
+}
+
 /** Текст на языке интерфейса с запасными вариантами, как делает стоковый гид. */
 export function localized(text: LocalizedText | undefined, lang: string | undefined): string {
   if (!text) return '';

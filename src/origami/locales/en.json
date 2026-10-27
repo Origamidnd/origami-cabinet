@@ -168,8 +168,8 @@
       "close": "Close",
       "step1": {
         "title": "Install {{app}}",
-        "text": "Free from the app store.",
-        "button": "Open the store"
+        "text": "Download and install the app.",
+        "button": "Download"
       },
       "step2": {
         "title": "Add the subscription",

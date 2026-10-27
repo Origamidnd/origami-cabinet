@@ -4,6 +4,7 @@ import {
   appId,
   findAddLink,
   detectPlatform,
+  findInstall,
   findInstallUrl,
   localized,
   orderPlatforms,
@@ -133,6 +134,54 @@ describe('findInstallUrl', () => {
     });
     expect(findInstallUrl(a)).toBeNull();
     expect(findInstallUrl(null)).toBeNull();
+  });
+});
+
+describe('findInstall', () => {
+  it('все ссылки установки с подписями и описание шага, как на странице подписки', () => {
+    const a = app('Happ', {
+      blocks: [
+        {
+          title: { ru: 'Установка приложения' },
+          description: { ru: 'Скачайте и установите Happ' },
+          buttons: [
+            {
+              text: { ru: '.deb (Ubuntu/Debian)' },
+              type: 'external',
+              link: 'https://x.test/happ.deb',
+            },
+            {
+              text: { ru: '.rpm (Fedora/RHEL)' },
+              type: 'external',
+              link: 'https://x.test/happ.rpm',
+            },
+          ],
+        },
+        {
+          title: { ru: 'Добавление подписки' },
+          description: { ru: '' },
+          buttons: [
+            {
+              text: { ru: 'Добавить' },
+              type: 'subscriptionLink',
+              link: 'happ://add/{{SUBSCRIPTION_LINK}}',
+            },
+          ],
+        },
+      ],
+    });
+    expect(findInstall(a, 'ru')).toEqual({
+      links: [
+        { url: 'https://x.test/happ.deb', label: '.deb (Ubuntu/Debian)' },
+        { url: 'https://x.test/happ.rpm', label: '.rpm (Fedora/RHEL)' },
+      ],
+      text: 'Скачайте и установите Happ',
+    });
+  });
+
+  it('нет ссылок установки или приложения - пусто', () => {
+    expect(findInstall(null, 'ru')).toEqual({ links: [], text: '' });
+    expect(findInstall(app('X'), 'ru')).toEqual({ links: [], text: '' });
   });
 });
 

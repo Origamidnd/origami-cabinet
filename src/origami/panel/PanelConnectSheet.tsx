@@ -92,7 +92,8 @@ export default function PanelConnectSheet({ onClose }: { onClose: () => void }) 
       }}
       appName={connect.app?.name ?? ''}
       step={progress.step}
-      installUrl={connect.installUrl}
+      installLinks={connect.installLinks}
+      installText={connect.installText}
       onInstall={() => update({ step: Math.max(progress.step, 2) as 2 | 3 })}
       canAdd={Boolean(connect.app)}
       onAdd={() => {
