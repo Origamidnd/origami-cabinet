@@ -710,3 +710,10 @@ button.og-qr-btn:focus-visible {
 .og-header:has(.og-header-narrow) {
   border-bottom-color: transparent;
 }
+
+/* /app: hands the subscription over to the OrigamiVPN desktop client. */
+.og-applink {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 48px 16px;
+}

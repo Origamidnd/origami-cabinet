@@ -202,6 +202,22 @@
         "title": "Balance and friends",
         "text": "Top-ups, payment history and referral bonuses"
       }
+    },
+    "applink": {
+      "loading": "Preparing the subscription for the app…",
+      "title": "Your subscription is ready",
+      "text": "The OrigamiVPN app opens now and adds the subscription by itself. If the browser asks for permission, choose Open.",
+      "open": "Open in OrigamiVPN",
+      "notOpened": "The app did not open? Copy the link and paste it into OrigamiVPN, or install the app.",
+      "copy": "Copy link",
+      "copied": "Copied",
+      "download": "Download OrigamiVPN",
+      "noSubTitle": "No active subscription",
+      "noSubText": "Get a subscription and you can add it to the app right away.",
+      "buy": "Get a subscription",
+      "errorTitle": "Could not load the subscription",
+      "errorText": "Reload the page or contact support.",
+      "toCabinet": "Go to your account"
     }
   }
 }
