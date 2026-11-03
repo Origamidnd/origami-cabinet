@@ -218,6 +218,9 @@
       "errorTitle": "Could not load the subscription",
       "errorText": "Reload the page or contact support.",
       "toCabinet": "Go to your account"
+    },
+    "promo": {
+      "toggle": "Have a promo code?"
     }
   }
 }

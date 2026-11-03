@@ -10,6 +10,7 @@ import { registerOrigamiLocales } from '../i18n';
 import '../styles/origami.css';
 import '../styles/panel.css';
 import PanelModal from './PanelModal';
+import PromoCodeForm from '../promo/PromoCodeForm';
 
 registerOrigamiLocales();
 
@@ -67,6 +68,7 @@ export default function PanelTopUp({ children }: { children: ReactNode }) {
         onClose={close}
         onBack={back}
       >
+        {!isAmountStep(pathname) && <PromoCodeForm initiallyOpen={params.get('promo') === '1'} />}
         {children}
       </PanelModal>
     </>

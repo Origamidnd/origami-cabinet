@@ -231,6 +231,9 @@ export default function OverviewWidgets({
           >
             {t('origami.overview.topup')}
           </Link>
+          <Link to="/balance/top-up?promo=1" className="og-link og-w-link og-w-promo">
+            {t('origami.promo.toggle')}
+          </Link>
         </section>
       </div>
 

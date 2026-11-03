@@ -638,3 +638,55 @@ html.dark .og-drawer-bg {
   color: var(--og-muted);
   white-space: nowrap;
 }
+
+/* Промокод: ссылка в виджете баланса и форма в окне пополнения */
+.og-w-promo {
+  align-self: center;
+  font-size: 13px;
+}
+.og-promo-toggle {
+  display: block;
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+.og-promo {
+  margin: 0 0 16px;
+  padding: 14px;
+  border: 1px solid rgba(var(--color-dark-600), 0.6);
+  border-radius: 14px;
+}
+.og-promo-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+@media (max-width: 560px) {
+  .og-promo-row {
+    flex-direction: column;
+  }
+}
+.og-promo-msg {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.og-promo-err {
+  color: rgb(var(--color-error-400));
+}
+.og-promo-ok {
+  color: rgb(var(--color-success-400));
+}
+.og-promo-pick {
+  display: grid;
+  gap: 8px;
+}
+.og-promo-sub {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid rgb(var(--color-dark-600));
+  border-radius: 10px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
