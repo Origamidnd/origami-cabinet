@@ -221,6 +221,12 @@
     },
     "promo": {
       "toggle": "Have a promo code?"
+    },
+    "devicesPage": {
+      "title": "Devices",
+      "add": "Connect a device",
+      "noSubscription": "Devices will appear once you have a subscription.",
+      "buy": "Buy a subscription"
     }
   }
 }

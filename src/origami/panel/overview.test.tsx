@@ -138,7 +138,7 @@ describe('обзор: активная подписка с устройства�
       'I',
       'T',
     ]);
-    expect(widget.querySelector('a')?.getAttribute('href')).toBe('/subscriptions');
+    expect(widget.querySelector('a')?.getAttribute('href')).toBe('/devices');
   });
 
   it('друзья скрыты, если реферальная программа выключена', () => {

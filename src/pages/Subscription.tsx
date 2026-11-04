@@ -39,6 +39,7 @@ import {
   ReissueLinkButton,
 } from '../components/subscription/manage/ReissueLinkButton';
 import { DevicesPanel } from '../components/subscription/manage/DevicesPanel';
+import { ORIGAMI_SHELL } from '../origami/shell/config';
 import { RecurringPanels } from '../components/subscription/manage/RecurringPanels';
 import { DeviceTopupSheet } from '../components/subscription/sheets/DeviceTopupSheet';
 import { DeviceReductionSheet } from '../components/subscription/sheets/DeviceReductionSheet';
@@ -1108,8 +1109,8 @@ export default function Subscription() {
         </div>
       )}
 
-      {/* My Devices Section */}
-      {subscription && (
+      {/* My Devices Section (Origami: в панели список на отдельном экране /devices) */}
+      {subscription && ORIGAMI_SHELL !== 'panel' && (
         <div
           className="relative overflow-hidden rounded-3xl"
           style={{

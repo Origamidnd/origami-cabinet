@@ -79,8 +79,10 @@ describe('isPanelItemActive', () => {
     expect(isPanelItemActive('/', overview)).toBe(true);
     expect(isPanelItemActive('/balance', overview)).toBe(false);
   });
-  it('устройства активны на шторе, баланс на вложенных', () => {
+  it('устройства активны на своём экране и шторе, баланс на вложенных', () => {
+    expect(isPanelItemActive('/devices', devices)).toBe(true);
     expect(isPanelItemActive('/add-device', devices)).toBe(true);
+    expect(isPanelItemActive('/subscriptions', devices)).toBe(false);
     expect(isPanelItemActive('/balance/top-up', balance)).toBe(true);
     expect(isPanelItemActive('/support', balance)).toBe(false);
   });

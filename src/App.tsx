@@ -77,6 +77,7 @@ const GiftResult = lazyWithRetry(() => import('./pages/GiftResult'));
 const Connection = lazyWithRetry(() => import('./pages/Connection'));
 const AddDevice = lazyWithRetry(() => import('./origami/pages/AddDevice'));
 const AppLink = lazyWithRetry(() => import('./origami/pages/AppLink'));
+const OrigamiDevices = lazyWithRetry(() => import('./origami/pages/Devices'));
 const ConnectionQR = lazyWithRetry(() => import('./pages/ConnectionQR'));
 const QuickPurchase = lazyWithRetry(() => import('./pages/QuickPurchase'));
 const PurchaseSuccess = lazyWithRetry(() => import('./pages/PurchaseSuccess'));
@@ -643,6 +644,16 @@ function App() {
             <ProtectedRoute>
               <LazyPage>
                 <AddDevice />
+              </LazyPage>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/devices"
+          element={
+            <ProtectedRoute>
+              <LazyPage>
+                <OrigamiDevices />
               </LazyPage>
             </ProtectedRoute>
           }

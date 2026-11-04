@@ -285,7 +285,7 @@ export default function OverviewWidgets({
         <section className="og-w" data-testid="widget-my-devices">
           <div className="og-w-head">
             <span className="og-eyebrow">{t('origami.overview.myDevices')}</span>
-            <Link to="/subscriptions" className="og-link og-w-all">
+            <Link to="/devices" className="og-link og-w-all">
               {t('origami.overview.all')}
             </Link>
           </div>

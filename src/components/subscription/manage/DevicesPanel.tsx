@@ -78,8 +78,6 @@ export function DevicesPanel({ subscription, subscriptionId }: DevicesPanelProps
 
   return (
     <>
-      {/* Origami: якорь для пункта меню «Устройства» (/subscriptions#devices) */}
-      <div id="devices" className="scroll-mt-24" aria-hidden="true" />
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-base font-bold tracking-tight text-dark-50">
           {t('subscription.myDevices')}

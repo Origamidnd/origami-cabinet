@@ -41,10 +41,10 @@ export const OVERVIEW: PanelNavItem = {
   labelKey: 'origami.panel.overview',
   icon: 'home',
 };
-// Список устройств живёт на странице подписки (блок #devices); подключение нового - кнопки «Подключить» (/add-device).
+// Отдельный экран со списком устройств; подключение нового - кнопка на нём и штора /add-device.
 export const DEVICES: PanelNavItem = {
   key: 'devices',
-  path: '/subscriptions#devices',
+  path: '/devices',
   labelKey: 'origami.panel.devices',
   icon: 'devices',
 };
@@ -101,10 +101,10 @@ export function buildMoreItems(flags: MenuFlags): MenuItem[] {
   return pick(flags, keys).map(({ icon: _icon, ...item }) => item);
 }
 
-/** Активность пункта: «Обзор» только на `/`, «Устройства» на `/add-device`, «Подписка» на `/subscription...`. */
+/** Активность пункта: «Обзор» только на `/`, «Устройства» на `/devices` и `/add-device`, «Подписка» на `/subscription...`. */
 export function isPanelItemActive(pathname: string, item: PanelNavItem): boolean {
   if (item.path === '/') return pathname === '/';
   if (item.key === 'subscription') return pathname.startsWith('/subscription');
-  if (item.key === 'devices') return pathname === '/add-device';
+  if (item.key === 'devices') return pathname === '/devices' || pathname === '/add-device';
   return pathname === item.path || pathname.startsWith(`${item.path}/`);
 }

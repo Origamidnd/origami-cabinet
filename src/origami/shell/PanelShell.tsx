@@ -83,20 +83,6 @@ export default function PanelShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     setMoreOpen(false);
   }, [location.pathname]);
-  // «Устройства» ведёт на /subscriptions#devices: блок устройств появляется после загрузки подписки, ждём его до 5 с.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: путь нужен как триггер (редирект на /subscriptions/<id> с тем же якорем)
-  useEffect(() => {
-    if (location.hash !== '#devices') return;
-    let tries = 0;
-    const timer = window.setInterval(() => {
-      const el = document.getElementById('devices');
-      if (el || ++tries > 25) {
-        window.clearInterval(timer);
-        el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 200);
-    return () => window.clearInterval(timer);
-  }, [location.pathname, location.hash]);
   // При переходе на широкий экран лист не нужен.
   useEffect(() => {
     if (desktop) setMoreOpen(false);
