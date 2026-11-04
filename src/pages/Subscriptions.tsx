@@ -110,7 +110,8 @@ export default function Subscriptions() {
 
   // Single-tariff mode with one subscription: skip list, go directly to detail
   if (data && !isMultiTariff && subscriptions.length === 1) {
-    return <Navigate to={`/subscriptions/${subscriptions[0].id}`} replace />;
+    // Origami: сохраняем якорь (#devices из пункта меню «Устройства»)
+    return <Navigate to={`/subscriptions/${subscriptions[0].id}${window.location.hash}`} replace />;
   }
 
   return (
