@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import { ChevronRightIcon, CogIcon, LogoutIcon } from '@/components/icons';
 import { registerOrigamiLocales } from '../i18n';
 import { isMenuItemActive, type MenuItem } from './menuItems';
+import PanelIconView from './PanelIcon';
+import type { PanelIcon } from './panelNav';
 
 registerOrigamiLocales();
 
@@ -12,7 +14,8 @@ export interface MenuSheetProps {
   open: boolean;
   onClose: () => void;
   pathname: string;
-  items: MenuItem[];
+  /** Пункты; иконка есть у пунктов панели. */
+  items: (MenuItem & { icon?: PanelIcon })[];
   isAdmin: boolean;
   userName: string;
   userHandle: string;
@@ -26,6 +29,8 @@ export interface MenuSheetProps {
   /** Колокольчик уведомлений: стоковый компонент должен быть смонтирован всегда, он показывает тосты. */
   notifications?: ReactNode;
   language?: ReactNode;
+  /** Вид панели (концепция 04): список с иконками, как в боковой колонке. */
+  variant?: 'panel';
 }
 
 /**
@@ -47,6 +52,7 @@ export default function MenuSheet({
   bottom,
   notifications,
   language,
+  variant,
 }: MenuSheetProps) {
   const { t } = useTranslation();
   const firstRef = useRef<HTMLAnchorElement>(null);
@@ -76,7 +82,7 @@ export default function MenuSheet({
   return (
     <div
       id={id}
-      className="og-sheet"
+      className={`og-sheet ${variant === 'panel' ? 'og-sheet-panel' : ''}`}
       style={{ top, bottom }}
       hidden={!open}
       role="dialog"
@@ -109,6 +115,11 @@ export default function MenuSheet({
                   onClick={onClose}
                   data-key={item.key}
                 >
+                  {item.icon && (
+                    <span className="og-menu-ico" aria-hidden="true">
+                      <PanelIconView name={item.icon} />
+                    </span>
+                  )}
                   <span>{t(item.labelKey)}</span>
                   <ChevronRightIcon className="h-5 w-5" />
                 </Link>

@@ -86,8 +86,8 @@ export function buildBottomItems(flags: MenuFlags): PanelNavItem[] {
   return [OVERVIEW, DEVICES, balance, HELP];
 }
 
-/** Содержимое листа «Ещё»: всё, чего нет в нижней панели. */
-export function buildMoreItems(flags: MenuFlags): MenuItem[] {
+/** Содержимое листа «Ещё»: всё, чего нет в нижней панели (с иконками, как в боковой колонке). */
+export function buildMoreItems(flags: MenuFlags): PanelNavItem[] {
   const keys = [
     'subscription',
     'referral',
@@ -98,7 +98,7 @@ export function buildMoreItems(flags: MenuFlags): MenuItem[] {
     'polls',
     'profile',
   ];
-  return pick(flags, keys).map(({ icon: _icon, ...item }) => item);
+  return pick(flags, keys);
 }
 
 /** Активность пункта: «Обзор» только на `/`, «Устройства» на `/devices` и `/add-device`, «Подписка» на `/subscription...`. */

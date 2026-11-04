@@ -224,7 +224,7 @@ export default function ConnectSheetView(props: ConnectSheetViewProps) {
             {props.qrUrl && !props.hideLink && (
               <button
                 type="button"
-                className="og-btn og-btn-sm og-btn-flat"
+                className="og-btn og-btn-sm og-btn-ghost"
                 style={{ marginTop: 14 }}
                 onClick={props.onCopy}
               >

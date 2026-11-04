@@ -699,7 +699,12 @@ export default function Subscription() {
                       haptic.notification('error');
                       return;
                     }
-                    navigate(subscriptionId ? `/connection?sub=${subscriptionId}` : '/connection');
+                    // Origami: в панели подключение - штора /add-device, как на обзоре и в «Устройствах»
+                    if (ORIGAMI_SHELL === 'panel') navigate('/add-device');
+                    else
+                      navigate(
+                        subscriptionId ? `/connection?sub=${subscriptionId}` : '/connection',
+                      );
                   }}
                   className={`mb-5 flex w-full items-center gap-3.5 rounded-[14px] p-3.5 text-left transition-shadow duration-300${isAtDeviceLimit ? 'cursor-not-allowed opacity-50' : ''}`}
                   style={{ fontFamily: 'inherit' }}

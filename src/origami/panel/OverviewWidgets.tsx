@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { PlusIcon } from '@/components/icons';
 import type { Subscription } from '@/types';
+import { DeviceRow } from '../devices/DeviceRow';
 import { HelpBlock } from '../home/blocks';
 import { daysSince, longDate, relativeDaysAgo, trafficPercent } from '../home/format';
 import { registerOrigamiLocales } from '../i18n';
@@ -42,10 +43,6 @@ export interface OverviewProps {
   extras?: LkExtras | null;
   onConnect: () => void;
   onDismiss: () => void;
-}
-
-function deviceTitle(d: OverviewDevice): string {
-  return d.local_name?.trim() || d.device_model || d.platform;
 }
 
 /**
@@ -164,7 +161,12 @@ export default function OverviewWidgets({
             <span className="og-eyebrow">{t('origami.overview.traffic')}</span>
           </div>
           <div className="og-w-val">
-            {unlimited ? '∞' : sub.traffic_used_gb.toFixed(1)}
+            {unlimited
+              ? '∞'
+              : sub.traffic_used_gb.toLocaleString(lang, {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                })}
             {!unlimited && (
               <small>
                 / {sub.traffic_limit_gb} {t('common.units.gb')}
@@ -290,19 +292,9 @@ export default function OverviewWidgets({
             </Link>
           </div>
           {devices && devices.devices.length > 0 ? (
-            devices.devices.slice(0, 4).map((d) => (
-              <div className="og-dev" key={d.hwid}>
-                <div className="og-dev-ico" aria-hidden="true">
-                  {deviceTitle(d).charAt(0).toUpperCase()}
-                </div>
-                <div style={{ minWidth: 0 }}>
-                  <b style={{ overflowWrap: 'anywhere' }}>{deviceTitle(d)}</b>
-                  <div className="og-sm">
-                    {[d.platform, longDate(d.created_at, lang)].filter(Boolean).join(', ')}
-                  </div>
-                </div>
-              </div>
-            ))
+            devices.devices
+              .slice(0, 4)
+              .map((d) => <DeviceRow key={d.hwid} device={d} lang={lang} />)
           ) : (
             <p className="og-sm" style={{ marginTop: 10 }}>
               {total === 0 ? t('origami.overview.devicesNone') : t('origami.summary.noDevices')}

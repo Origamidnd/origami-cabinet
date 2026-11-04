@@ -690,3 +690,187 @@ html.dark .og-drawer-bg {
   color: inherit;
   cursor: pointer;
 }
+
+/* ---------- ревью 04.11: экран «Устройства», лист «Ещё», нижняя панель, высота колонки ---------- */
+/* шапка экрана панели: надзаголовок и H1 как у «Обзора», главное действие справа (на телефоне под заголовком) */
+.og-page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.og-page-head-btn {
+  margin-bottom: 4px;
+}
+@media (max-width: 820px) {
+  .og-h1-panel {
+    font-size: 34px;
+  }
+  .og-page-head-btn {
+    width: 100%;
+  }
+}
+.og-devices {
+  margin-top: 20px;
+}
+.og-devices + .og-devices {
+  margin-top: 16px;
+}
+.og-w-loading {
+  min-height: 220px;
+}
+.og-devices-list {
+  margin-top: 10px;
+}
+.og-devices-empty {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  padding: 8px 0;
+}
+.og-devices-cta {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+.og-devices-clear {
+  align-self: flex-start;
+  min-height: 44px;
+  margin-top: 6px;
+  font-size: 13px;
+}
+.og-dev-main {
+  flex: 1;
+  min-width: 0;
+}
+.og-dev-name {
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+.og-dev-ico {
+  color: var(--og-muted);
+}
+.og-dev-actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+.og-dev-actions .og-icon-btn {
+  width: 44px;
+  height: 44px;
+  color: var(--og-muted);
+}
+.og-dev-actions .og-icon-btn:hover {
+  color: var(--og-text);
+}
+.og-dev-actions .og-icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.og-dev-input {
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 10px;
+  border: 1.5px solid var(--og-line);
+  border-radius: 2px;
+  background: var(--og-field);
+  color: var(--og-text);
+  font-weight: 600;
+  font-size: 16px;
+}
+.og-dev-input:focus {
+  outline: none;
+  border-color: rgb(var(--color-accent-500));
+  box-shadow: 3px 3px 0 var(--og-shadow);
+}
+
+/* нижняя панель: все подписи одним моноширинным шрифтом (у кнопки «Ещё» стоковый шрифт кнопок), 11 px;
+   колонка не уже своей подписи, чтобы «Устройства» не обрезались, остальное место делится поровну */
+.og-bnav {
+  grid-template-columns: repeat(5, minmax(min-content, 1fr));
+}
+.og-bnav .og-bnav-item {
+  font-family: var(--og-mono) !important;
+  font-size: 11px;
+}
+
+/* лист «Ещё» панели: список как в боковой колонке (иконка, обычный шрифт), тихий «Выйти» */
+.og-sheet-panel .og-sheet-nav {
+  gap: 0;
+  border: 1.5px solid var(--og-line);
+  border-radius: 2px;
+  background: var(--og-plate);
+}
+.og-sheet-panel .og-menu-item {
+  justify-content: flex-start;
+  min-height: 52px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font: 500 16px / 1.2 var(--og-body);
+  letter-spacing: 0;
+}
+.og-sheet-panel .og-menu-item + .og-menu-item {
+  border-top: 1.5px dashed var(--og-crease);
+}
+.og-sheet-panel .og-menu-item > svg:last-child {
+  margin-left: auto;
+  color: var(--og-muted);
+}
+.og-sheet-panel .og-menu-item-on {
+  background: rgba(var(--color-accent-500), 0.16);
+  box-shadow: none;
+}
+.og-sheet-panel .og-menu-ico {
+  display: grid;
+  place-items: center;
+  color: var(--og-muted);
+}
+.og-sheet-panel .og-menu-item-on .og-menu-ico {
+  color: var(--og-text);
+}
+.og-sheet-panel .og-menu-item-danger {
+  min-height: 48px;
+  margin-top: 4px;
+  padding: 12px 4px;
+  border: 0;
+  background: none;
+  color: var(--og-muted);
+  font: 500 15px / 1.2 var(--og-body);
+}
+
+/* колонка на ПК: на невысоких экранах (ноутбук 1280x800 и ниже) пункты плотнее, чтобы низ не обрезался */
+@media (max-height: 860px) {
+  .og-side {
+    gap: 4px;
+    padding-top: 14px;
+    padding-bottom: 12px;
+  }
+  .og-side-logo {
+    margin-bottom: 10px;
+  }
+  .og-side-nav {
+    gap: 2px;
+  }
+  .og-side-link {
+    padding: 8px 12px;
+  }
+  .og-side-nav-2 {
+    margin-top: 6px;
+    padding-top: 6px;
+  }
+  .og-side-balance {
+    gap: 6px;
+    padding: 10px;
+  }
+  .og-side-balance-v {
+    font-size: 26px;
+  }
+  .og-side-tools {
+    margin-top: 6px;
+  }
+}

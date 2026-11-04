@@ -80,12 +80,15 @@ export default function PanelConnectSheet({ onClose }: { onClose: () => void }) 
         selected: key === connect.platform,
       }))}
       onPlatform={connect.setPlatform}
-      apps={connect.apps.map((app) => ({
-        name: app.name,
-        recommended: app.name === recommended,
-        oneTap: findAddLink(app, subscriptionUrl) !== null,
-        selected: connect.app?.name === app.name,
-      }))}
+      apps={connect.apps
+        .map((app) => ({
+          name: app.name,
+          recommended: app.name === recommended,
+          oneTap: findAddLink(app, subscriptionUrl) !== null,
+          selected: connect.app?.name === app.name,
+        }))
+        // рекомендуемое приложение первым, остальные в порядке проекта
+        .sort((a, b) => Number(b.recommended) - Number(a.recommended))}
       onApp={(name) => {
         const app = connect.apps.find((a) => a.name === name);
         if (app) update({ appId: appId(app) });

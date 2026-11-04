@@ -226,7 +226,12 @@
       "title": "Devices",
       "add": "Connect a device",
       "noSubscription": "Devices will appear once you have a subscription.",
-      "buy": "Buy a subscription"
+      "buy": "Buy a subscription",
+      "eyebrow": "Your devices",
+      "connected": "Connected",
+      "unlimited": "no limit",
+      "empty": "No devices connected yet. It takes a couple of minutes.",
+      "removeAll": "Remove all devices"
     }
   }
 }

@@ -368,7 +368,7 @@ export function RecurringPanels({ subscription, subscriptionId }: RecurringPanel
                 <button
                   onClick={() => enableSbpMutation.mutate()}
                   disabled={enableSbpMutation.isPending}
-                  className="w-full whitespace-nowrap rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-medium text-on-accent transition-opacity disabled:opacity-50 sm:w-auto"
+                  className="btn-secondary w-full whitespace-nowrap px-5 py-2.5 text-sm font-medium disabled:opacity-50 sm:w-auto"
                 >
                   {enableSbpMutation.isPending ? (
                     <span className="mx-auto block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -387,7 +387,7 @@ export function RecurringPanels({ subscription, subscriptionId }: RecurringPanel
                           openPaymentUrl(sbpInfo.redirect_url, platform, openLink);
                         }
                       }}
-                      className="w-full whitespace-nowrap rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-medium text-on-accent transition-opacity sm:w-auto"
+                      className="btn-secondary w-full whitespace-nowrap px-5 py-2.5 text-sm font-medium sm:w-auto"
                     >
                       {t('subscription.sbpRecurring.confirmInBank')}
                     </button>
@@ -487,7 +487,7 @@ export function RecurringPanels({ subscription, subscriptionId }: RecurringPanel
                 <button
                   onClick={() => enableLavaMutation.mutate()}
                   disabled={enableLavaMutation.isPending}
-                  className="w-full whitespace-nowrap rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-medium text-on-accent transition-opacity disabled:opacity-50 sm:w-auto"
+                  className="btn-secondary w-full whitespace-nowrap px-5 py-2.5 text-sm font-medium disabled:opacity-50 sm:w-auto"
                 >
                   {enableLavaMutation.isPending ? (
                     <span className="mx-auto block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -506,7 +506,7 @@ export function RecurringPanels({ subscription, subscriptionId }: RecurringPanel
                           openPaymentUrl(lavaInfo.redirect_url, platform, openLink);
                         }
                       }}
-                      className="w-full whitespace-nowrap rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-medium text-on-accent transition-opacity sm:w-auto"
+                      className="btn-secondary w-full whitespace-nowrap px-5 py-2.5 text-sm font-medium sm:w-auto"
                     >
                       {t('subscription.lavaRecurring.payFirst')}
                     </button>
@@ -595,7 +595,7 @@ export function RecurringPanels({ subscription, subscriptionId }: RecurringPanel
                 <button
                   onClick={() => enableCasheraMutation.mutate()}
                   disabled={enableCasheraMutation.isPending}
-                  className="w-full whitespace-nowrap rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-medium text-on-accent transition-opacity disabled:opacity-50 sm:w-auto"
+                  className="btn-secondary w-full whitespace-nowrap px-5 py-2.5 text-sm font-medium disabled:opacity-50 sm:w-auto"
                 >
                   {enableCasheraMutation.isPending ? (
                     <span className="mx-auto block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -614,7 +614,7 @@ export function RecurringPanels({ subscription, subscriptionId }: RecurringPanel
                           openPaymentUrl(casheraInfo.redirect_url, platform, openLink);
                         }
                       }}
-                      className="w-full whitespace-nowrap rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-medium text-on-accent transition-opacity sm:w-auto"
+                      className="btn-secondary w-full whitespace-nowrap px-5 py-2.5 text-sm font-medium sm:w-auto"
                     >
                       {t('subscription.casheraRecurring.confirm')}
                     </button>

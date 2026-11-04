@@ -68,8 +68,8 @@ describe('нижняя панель и «Ещё»', () => {
     expect(keys(buildMoreItems({}))).toEqual(['subscription', 'info', 'profile']);
   });
 
-  it('пункты «Ещё» не несут лишних полей иконки', () => {
-    expect(Object.keys(buildMoreItems({})[0]).sort()).toEqual(['key', 'labelKey', 'path']);
+  it('пункты «Ещё» несут иконку, как в боковой колонке', () => {
+    expect(Object.keys(buildMoreItems({})[0]).sort()).toEqual(['icon', 'key', 'labelKey', 'path']);
   });
 });
 

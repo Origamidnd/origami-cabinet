@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { type ReactNode, useCallback, useEffect, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
 import { balanceApi } from '@/api/balance';
@@ -35,6 +35,11 @@ import '../styles/panel.css';
 registerOrigamiLocales();
 
 const MORE_ID = 'og-more';
+
+/** Экраны-окна поверх обзора: штора подключения и пополнение. */
+function isOverlayPath(path: string): boolean {
+  return path === '/add-device' || path.startsWith('/balance/top-up');
+}
 
 /**
  * Оболочка панели (концепция 04): на ПК боковая колонка 232 px, на телефоне верхняя полоса с логотипом
@@ -82,6 +87,16 @@ export default function PanelShell({ children }: { children: ReactNode }) {
   // biome-ignore lint/correctness/useExhaustiveDependencies: путь нужен как триггер
   useEffect(() => {
     setMoreOpen(false);
+  }, [location.pathname]);
+  // Новый экран открывается с начала. Штора подключения и окно пополнения ложатся поверх: ни при их
+  // открытии, ни при возврате из них прокрутку не трогаем.
+  const prevPath = useRef(location.pathname);
+  useEffect(() => {
+    const from = prevPath.current;
+    prevPath.current = location.pathname;
+    if (from === location.pathname || isOverlayPath(from) || isOverlayPath(location.pathname))
+      return;
+    window.scrollTo(0, 0);
   }, [location.pathname]);
   // При переходе на широкий экран лист не нужен.
   useEffect(() => {
@@ -177,6 +192,7 @@ export default function PanelShell({ children }: { children: ReactNode }) {
             bottom="var(--og-bnav-h)"
             notifications={bell}
             language={language}
+            variant="panel"
           />
           <PanelBottomNav
             pathname={location.pathname}

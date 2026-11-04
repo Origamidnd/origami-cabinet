@@ -15,6 +15,9 @@
   --og-on-action: var(--on-action, rgb(var(--color-on-accent)));
   --og-display: var(--f-display, "Sofia Sans Extra Condensed", "Arial Narrow", sans-serif);
   --og-mono: var(--f-mono, "IBM Plex Mono", ui-monospace, monospace);
+  --og-body: var(--f-body, "Onest", system-ui, sans-serif);
+  --og-accent-text: #f59b5b;
+  --og-danger-text: #ef8a72;
   color: var(--og-text);
   max-width: 720px;
   margin: 0 auto;
@@ -136,11 +139,15 @@
   background: none;
   border: 0;
   padding: 6px 0;
-  color: rgb(var(--color-accent-400));
+  color: var(--og-accent-text);
   text-decoration: underline;
   cursor: pointer;
   font-size: 14px;
   text-align: left;
+}
+
+.og-link-danger {
+  color: var(--og-danger-text);
 }
 
 .og-tag {
@@ -436,6 +443,13 @@
   --og-muted: rgb(var(--color-dark-400));
   --og-display: var(--f-display, "Sofia Sans Extra Condensed", "Arial Narrow", sans-serif);
   --og-mono: var(--f-mono, "IBM Plex Mono", ui-monospace, monospace);
+  --og-body: var(--f-body, "Onest", system-ui, sans-serif);
+  --og-accent-text: #f59b5b;
+  --og-danger-text: #ef8a72;
+}
+html.light :is(.og, .og-shell) {
+  --og-accent-text: #b5501a;
+  --og-danger-text: #be3a22;
 }
 .og-header {
   position: fixed;

@@ -106,7 +106,7 @@ describe('обзор: активная подписка с устройства�
   it('трафик: использовано и лимит, полоса по проценту', () => {
     view();
     const widget = screen.getByTestId('widget-traffic');
-    expect(widget.textContent).toContain('187.4');
+    expect(widget.textContent).toContain('187,4');
     expect(widget.textContent).toContain('500');
     expect((widget.querySelector('.og-meter > i') as HTMLElement).style.width).toBe('37%');
   });
@@ -131,13 +131,12 @@ describe('обзор: активная подписка с устройства�
     expect(widget.querySelector('a')?.getAttribute('href')).toBe('/balance/top-up');
   });
 
-  it('мои устройства: буквы в квадратах и ссылка «Все»', () => {
+  it('мои устройства: строки с иконкой платформы и ссылка «Все»', () => {
     view();
     const widget = screen.getByTestId('widget-my-devices');
-    expect([...widget.querySelectorAll('.og-dev-ico')].map((n) => n.textContent)).toEqual([
-      'I',
-      'T',
-    ]);
+    const rows = widget.querySelectorAll('[data-testid="device-row"]');
+    expect(rows).toHaveLength(2);
+    expect(rows[0].querySelector('.og-dev-ico svg')).not.toBeNull();
     expect(widget.querySelector('a')?.getAttribute('href')).toBe('/devices');
   });
 
