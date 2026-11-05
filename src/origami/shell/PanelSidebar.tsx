@@ -95,7 +95,7 @@ export default function PanelSidebar({
       <div className="og-side-balance">
         <div className="og-eyebrow">{t('origami.panel.balance')}</div>
         <div className="og-side-balance-v">{balanceText ?? '-'}</div>
-        <Link to="/balance/top-up" className="og-btn og-btn-sm og-btn-block">
+        <Link to="/balance/top-up" className="og-btn og-btn-sm og-btn-block og-btn-ghost">
           {t('origami.panel.topup')}
         </Link>
       </div>

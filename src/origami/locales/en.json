@@ -262,6 +262,9 @@
       "otherText": "Setting up a phone or TV nearby? Point its camera at the code.",
       "notConfigured": "The app list is not available yet.",
       "open": "Open the standard page"
+    },
+    "subscriptionPage": {
+      "autopayMethods": "Other autopay methods"
     }
   }
 }

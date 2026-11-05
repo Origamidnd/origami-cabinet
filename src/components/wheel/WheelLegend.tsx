@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { WHEEL_SECTOR_COLORS } from './FortuneWheel';
 import type { WheelPrize } from '../../api/wheel';
 
 interface WheelLegendProps {
@@ -6,26 +7,13 @@ interface WheelLegendProps {
 }
 
 const WheelLegend = memo(function WheelLegend({ prizes }: WheelLegendProps) {
-  // Get sector color (same logic as in FortuneWheel)
-  const getSectorColor = (index: number, baseColor?: string) => {
-    if (baseColor) return baseColor;
-    const colors = [
-      '#8B5CF6',
-      '#EC4899',
-      '#3B82F6',
-      '#10B981',
-      '#F59E0B',
-      '#EF4444',
-      '#6366F1',
-      '#14B8A6',
-    ];
-    return colors[index % colors.length];
-  };
+  // Те же цвета, что у секторов колеса
+  const getSectorColor = (index: number) => WHEEL_SECTOR_COLORS[index % WHEEL_SECTOR_COLORS.length];
 
   return (
     <div className="space-y-2">
       {prizes.map((prize, index) => {
-        const color = getSectorColor(index, prize.color);
+        const color = getSectorColor(index);
         return (
           <div
             key={prize.id}

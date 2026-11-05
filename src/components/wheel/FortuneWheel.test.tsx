@@ -11,9 +11,9 @@ import FortuneWheel from './FortuneWheel';
  * пропадал обод под квадратом вращающейся группы, после переноса обода выше —
  * чёрный прямоугольник поверх секторов. Слои заводили CSS-transform на группе
  * (вращение) и анимация opacity у свечения лампочек. Теперь вращение идёт
- * SVG-атрибутом, который рисуется вместе со всем SVG, свечение — через
- * fill-opacity, а порядок слоёв держится: обод и лампочки после группы,
- * ступица после обода.
+ * SVG-атрибутом, который рисуется вместе со всем SVG. Лампочек и анимаций в SVG
+ * больше нет (колесо в цветах бренда), а порядок слоёв держится: обод после
+ * группы, ступица после обода.
  */
 
 const prizes = [
@@ -40,17 +40,14 @@ function pick(container: HTMLElement, selector: string): Element {
 }
 
 describe('FortuneWheel — порядок слоёв', () => {
-  it('обод и лампочки идут после вращающейся группы, ступица — после обода', () => {
+  it('обод идёт после вращающейся группы, ступица - после обода', () => {
     const { container } = render(<FortuneWheel {...rest} />);
     const rotating = pick(container, ROTATING);
-    const ring = pick(container, 'circle[stroke="url(#ringGrad)"]');
-    const led = pick(container, '.led-dot');
-    const hub = pick(container, 'circle[fill="url(#hubGrad)"]');
+    const ring = pick(container, '[data-testid="wheel-ring"]');
+    const hub = pick(container, '[data-testid="wheel-hub"]');
 
     expect(follows(ring, rotating)).toBe(true);
-    expect(follows(led, rotating)).toBe(true);
     expect(follows(hub, ring)).toBe(true);
-    expect(follows(hub, led)).toBe(true);
   });
 });
 
@@ -61,11 +58,17 @@ describe('FortuneWheel — ничего не компонуется отдель
     expect(pick(container, ROTATING).getAttribute('transform')).toBe('rotate(0 200 200)');
   });
 
-  it('свечение лампочек анимирует fill-opacity, а не opacity', () => {
+  it('в SVG нет CSS-анимаций: они заводили бы отдельные слои', () => {
     const { container } = render(<FortuneWheel {...rest} />);
-    const css = container.querySelector('svg style')?.textContent ?? '';
-    expect(css).toMatch(/\.led-glow\s*{[^}]*fill-opacity/);
-    expect(css).not.toMatch(/(?<![a-z-])opacity\s*:/);
+    expect(container.querySelector('svg style')).toBeNull();
+  });
+
+  it('сектора в цветах бренда, цвет приза из настроек не используется', () => {
+    const { container } = render(<FortuneWheel {...rest} />);
+    const fills = [...container.querySelectorAll('svg > g path')].map((n) =>
+      n.getAttribute('fill'),
+    );
+    expect(fills).toEqual(['#EE7C34', '#2F3D6B', '#C4561F']);
   });
 
   it('спин крутит группу атрибутом пять секунд и потом сообщает о завершении', () => {

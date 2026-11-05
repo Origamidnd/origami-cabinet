@@ -28,7 +28,6 @@ import {
   CryptoIcon,
   ExclamationIcon,
   ExternalLinkIcon,
-  SparklesIcon,
   StarIcon,
 } from '@/components/icons';
 
@@ -580,10 +579,7 @@ export default function TopUpAmount() {
             {isPending ? (
               <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
             ) : (
-              <>
-                <SparklesIcon className="h-4 w-4" />
-                <span>{t('balance.topUp')}</span>
-              </>
+              <span>{t('balance.topUp')}</span>
             )}
           </button>
         </div>
@@ -591,7 +587,7 @@ export default function TopUpAmount() {
 
       {/* Quick amount buttons */}
       {quickAmounts.length > 0 && (
-        <motion.div variants={staggerItem} className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <motion.div variants={staggerItem} className="grid grid-cols-4 gap-2">
           {quickAmounts.map((a) => {
             const val = getQuickValue(a);
             const isSelected = amount === val;
@@ -615,17 +611,17 @@ export default function TopUpAmount() {
                 }}
                 hover
                 glow={isSelected}
-                className={`flex flex-col items-center justify-center px-2 py-3 ${
+                className={`flex items-center justify-center gap-1 whitespace-nowrap px-1 py-2.5 ${
                   isSelected ? 'border-accent-500/50 bg-accent-500/10' : ''
                 }`}
               >
                 <span
-                  className={`text-base font-bold ${isSelected ? 'text-accent-400' : 'text-dark-200'}`}
+                  className={`text-sm font-semibold ${isSelected ? 'text-accent-400' : 'text-dark-200'}`}
                 >
                   {formatAmount(a, 0)}
                 </span>
                 <span
-                  className={`mt-0.5 text-xs ${isSelected ? 'text-accent-400' : 'text-dark-500'}`}
+                  className={`text-sm font-semibold ${isSelected ? 'text-accent-400' : 'text-dark-200'}`}
                 >
                   {currencySymbol}
                 </span>

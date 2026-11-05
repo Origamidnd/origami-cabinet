@@ -767,7 +767,7 @@ export default function Referral() {
                 <button
                   onClick={() => copyLink(referralLink, 'cabinet')}
                   disabled={!referralLink}
-                  className={`btn-primary min-w-0 shrink-0 px-4 ${
+                  className={`btn-secondary min-w-0 shrink-0 px-4 ${
                     copiedLink === 'cabinet' ? 'bg-success-500 hover:bg-success-500' : ''
                   } ${!referralLink ? 'cursor-not-allowed opacity-50' : ''}`}
                 >

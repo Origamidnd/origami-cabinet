@@ -455,7 +455,10 @@ export default function Support() {
         </Card>
 
         {/* Ticket Detail / Create Form */}
-        <Card className="lg:col-span-2">
+        {/* Origami: на телефоне пустая пластина «Выберите обращение» не нужна */}
+        <Card
+          className={`lg:col-span-2 ${!selectedTicket && !showCreateForm ? 'hidden lg:block' : ''}`}
+        >
           {showCreateForm ? (
             <div>
               <h2 className="mb-6 text-lg font-semibold text-dark-100">

@@ -152,36 +152,45 @@ const CountdownTimer = memo(function CountdownTimer({
                 </span>
               </>
             )}
-            <span
-              className="text-[20px] font-bold tracking-tight"
-              style={{ color: isUrgent ? 'rgb(var(--color-urgent-400))' : g.text }}
-            >
-              {String(countdown.hours).padStart(2, '0')}
-            </span>
-            <span
-              className="mx-[-1px] text-[16px] font-bold opacity-30"
-              style={{ color: isUrgent ? 'rgb(var(--color-urgent-400))' : g.text }}
-            >
-              :
-            </span>
-            <span
-              className="text-[20px] font-bold tracking-tight"
-              style={{ color: isUrgent ? 'rgb(var(--color-urgent-400))' : g.text }}
-            >
-              {String(countdown.minutes).padStart(2, '0')}
-            </span>
-            <span
-              className="mx-[-1px] text-[16px] font-bold opacity-30"
-              style={{ color: isUrgent ? 'rgb(var(--color-urgent-400))' : g.text }}
-            >
-              :
-            </span>
-            <span
-              className="text-[20px] font-bold tracking-tight"
-              style={{ color: isUrgent ? 'rgb(var(--color-urgent-400))' : g.text }}
-            >
-              {String(countdown.seconds).padStart(2, '0')}
-            </span>
+            {/* Origami: в панели хватает дней и даты, часы и минуты только в последние сутки, секунды не тикают */}
+            {(ORIGAMI_SHELL !== 'panel' || countdown.days === 0) && (
+              <>
+                <span
+                  className="text-[20px] font-bold tracking-tight"
+                  style={{ color: isUrgent ? 'rgb(var(--color-urgent-400))' : g.text }}
+                >
+                  {String(countdown.hours).padStart(2, '0')}
+                </span>
+                <span
+                  className="mx-[-1px] text-[16px] font-bold opacity-30"
+                  style={{ color: isUrgent ? 'rgb(var(--color-urgent-400))' : g.text }}
+                >
+                  :
+                </span>
+                <span
+                  className="text-[20px] font-bold tracking-tight"
+                  style={{ color: isUrgent ? 'rgb(var(--color-urgent-400))' : g.text }}
+                >
+                  {String(countdown.minutes).padStart(2, '0')}
+                </span>
+              </>
+            )}
+            {ORIGAMI_SHELL !== 'panel' && (
+              <>
+                <span
+                  className="mx-[-1px] text-[16px] font-bold opacity-30"
+                  style={{ color: isUrgent ? 'rgb(var(--color-urgent-400))' : g.text }}
+                >
+                  :
+                </span>
+                <span
+                  className="text-[20px] font-bold tracking-tight"
+                  style={{ color: isUrgent ? 'rgb(var(--color-urgent-400))' : g.text }}
+                >
+                  {String(countdown.seconds).padStart(2, '0')}
+                </span>
+              </>
+            )}
           </div>
           <div className="text-[10px] font-medium text-dark-400">
             {t('subscription.expiresAt')}: {formattedDate}
@@ -438,6 +447,13 @@ export default function Subscription() {
         </h1>
       </div>
 
+      {/* Purchase / Renewal CTA (Origami: главное действие сверху, на телефоне оно было ниже 1400 px) */}
+      <PurchaseCTAButton
+        subscription={subscription}
+        isMultiTariff={isMultiTariff}
+        isTariffsMode={isTariffsMode}
+      />
+
       {/* Current Subscription */}
       {subscription ? (
         (() => {
@@ -476,24 +492,26 @@ export default function Subscription() {
               {/* ─── Header ─── */}
               <div className="mb-6 flex items-start justify-between">
                 <div>
-                  {/* Zone indicator */}
-                  <div className="mb-1 flex items-center gap-2">
-                    <div
-                      className="h-2 w-2 rounded-full"
-                      style={{
-                        background: zone.mainHex,
-                        boxShadow: `0 0 8px ${zone.mainHex}80`,
-                        transition: 'all 0.6s ease',
-                      }}
-                      aria-hidden="true"
-                    />
-                    <span
-                      className="font-mono text-[11px] font-semibold uppercase tracking-widest"
-                      style={{ color: zone.mainHex, transition: 'color 0.6s ease' }}
-                    >
-                      {isUnlimited ? t('dashboard.unlimited') : t(zone.labelKey)}
-                    </span>
-                  </div>
+                  {/* Zone indicator (Origami: в панели скрыт, состояние трафика видно по полосе) */}
+                  {ORIGAMI_SHELL !== 'panel' && (
+                    <div className="mb-1 flex items-center gap-2">
+                      <div
+                        className="h-2 w-2 rounded-full"
+                        style={{
+                          background: zone.mainHex,
+                          boxShadow: `0 0 8px ${zone.mainHex}80`,
+                          transition: 'all 0.6s ease',
+                        }}
+                        aria-hidden="true"
+                      />
+                      <span
+                        className="font-mono text-[11px] font-semibold uppercase tracking-widest"
+                        style={{ color: zone.mainHex, transition: 'color 0.6s ease' }}
+                      >
+                        {isUnlimited ? t('dashboard.unlimited') : t(zone.labelKey)}
+                      </span>
+                    </div>
+                  )}
 
                   {/* Plan name */}
                   <h2 className="text-lg font-bold tracking-tight text-dark-50">
@@ -506,17 +524,17 @@ export default function Subscription() {
                   className="max-w-[55%] shrink-0 rounded-full px-3 py-1 text-center font-mono text-[10px] font-semibold uppercase tracking-wider"
                   style={{
                     background: subscription.is_active
-                      ? `${zone.mainHex}15`
+                      ? 'rgba(var(--color-success-500), 0.12)'
                       : subscription.is_limited
                         ? 'rgba(255,184,0,0.12)'
                         : 'rgba(255,59,92,0.12)',
                     border: subscription.is_active
-                      ? `1px solid ${zone.mainHex}30`
+                      ? '1px solid rgba(var(--color-success-500), 0.35)'
                       : subscription.is_limited
                         ? '1px solid rgba(255,184,0,0.25)'
                         : '1px solid rgba(255,59,92,0.25)',
                     color: subscription.is_active
-                      ? zone.mainHex
+                      ? 'rgb(var(--color-success-400))'
                       : subscription.is_limited
                         ? 'rgb(var(--color-urgent-400))'
                         : 'rgb(var(--color-critical-500))',
@@ -955,7 +973,13 @@ export default function Subscription() {
                 surface={{ background: g.innerBg, border: g.innerBorder }}
               />
 
-              <RecurringPanels subscription={subscription} subscriptionId={subscriptionId} />
+              {/* Origami: способы автоплатежа свёрнуты, чтобы не отодвигать остальное */}
+              <details className="og-autopay-more">
+                <summary>{t('origami.subscriptionPage.autopayMethods')}</summary>
+                <div className="og-autopay-body">
+                  <RecurringPanels subscription={subscription} subscriptionId={subscriptionId} />
+                </div>
+              </details>
             </div>
           );
         })()
@@ -992,13 +1016,6 @@ export default function Subscription() {
           <DailyPausePanel subscription={subscription} subscriptionId={subscriptionId} />
         </div>
       )}
-
-      {/* Purchase / Renewal CTA */}
-      <PurchaseCTAButton
-        subscription={subscription}
-        isMultiTariff={isMultiTariff}
-        isTariffsMode={isTariffsMode}
-      />
 
       {/* Delete expired subscription */}
       {isMultiTariff &&

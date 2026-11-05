@@ -1340,7 +1340,7 @@ export default function GiftSubscription() {
 
   return (
     <div className="min-h-dvh">
-      <div className="mx-auto max-w-2xl px-4 py-6">
+      <div className="max-w-2xl">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -1348,9 +1348,6 @@ export default function GiftSubscription() {
           transition={{ duration: 0.4 }}
           className="mb-6 flex items-center gap-3"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-500/20">
-            <GiftIcon className="h-5 w-5 text-accent-400" />
-          </div>
           <h1 className="text-2xl font-bold text-dark-50">{t('gift.pageTitle')}</h1>
         </motion.div>
 

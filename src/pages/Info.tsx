@@ -9,7 +9,7 @@ import { formatContent } from '../utils/legalContent';
 import { infoPagesApi } from '../api/infoPages';
 import { promoApi, type LoyaltyTierInfo } from '../api/promo';
 import type { FaqItem, ReplacesTab } from '../api/infoPages';
-import { DocumentIcon, InfoIcon, QuestionIcon, ShieldIcon, StarIcon } from '@/components/icons';
+import { DocumentIcon, QuestionIcon, ShieldIcon, StarIcon } from '@/components/icons';
 import { Skeleton, SkeletonGroup } from '@/components/ui/skeleton';
 
 const ChevronIcon = ({ expanded }: { expanded: boolean }) => (
@@ -747,10 +747,7 @@ export default function Info() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <InfoIcon className="h-6 w-6" />
-        <h1 className="text-2xl font-bold text-dark-50 sm:text-3xl">{t('info.title')}</h1>
-      </div>
+      <h1 className="text-2xl font-bold text-dark-50 sm:text-3xl">{t('info.title')}</h1>
 
       {/* Tabs */}
       <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-x-visible">
@@ -765,7 +762,7 @@ export default function Info() {
             }`}
           >
             {tab.emoji ? <span className="text-base">{tab.emoji}</span> : <tab.icon />}
-            <span className="max-w-[140px] truncate">{tab.label}</span>
+            <span className="whitespace-nowrap">{tab.label}</span>
           </button>
         ))}
       </div>

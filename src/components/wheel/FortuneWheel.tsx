@@ -4,6 +4,9 @@ import type { WheelPrize } from '../../api/wheel';
 
 const SIZE = 400;
 const CENTER = SIZE / 2;
+/** Цвета секторов: хурма и тушь вперемежку, те же у списка призов. */
+export const WHEEL_SECTOR_COLORS = ['#EE7C34', '#2F3D6B', '#C4561F', '#4A5B94'];
+
 const SPIN_DURATION_MS = 5000;
 /** Пять полных оборотов до целевого сектора. */
 const SPIN_EXTRA_TURNS_DEG = 1800;
@@ -139,36 +142,12 @@ const FortuneWheel = memo(function FortuneWheel({
     };
   };
 
-  // Alternate colors for sectors
-  const getSectorColors = (index: number, baseColor?: string) => {
-    if (baseColor) return baseColor;
-    const colors = [
-      '#8B5CF6',
-      '#EC4899',
-      '#3B82F6',
-      '#10B981',
-      '#F59E0B',
-      '#EF4444',
-      '#6366F1',
-      '#14B8A6',
-    ];
-    return colors[index % colors.length];
-  };
+  // Origami: сектора в цветах бренда, цвет приза из настроек не используем
+  const getSectorColors = (index: number) =>
+    WHEEL_SECTOR_COLORS[index % WHEEL_SECTOR_COLORS.length];
 
   return (
     <div className="relative mx-auto w-full max-w-[380px] select-none">
-      {/* Outer glow effect */}
-      <div
-        className={`absolute inset-[-30px] rounded-full transition-all duration-500 ${
-          isSpinning ? 'scale-105 opacity-100' : 'opacity-60'
-        }`}
-        style={{
-          background:
-            'radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(236, 72, 153, 0.2) 40%, transparent 70%)',
-          filter: 'blur(25px)',
-        }}
-      />
-
       {/* Pointer */}
       <div className="absolute left-1/2 top-[-12px] z-20 -translate-x-1/2">
         <div className="relative">
@@ -178,33 +157,14 @@ const FortuneWheel = memo(function FortuneWheel({
               background: 'radial-gradient(circle, rgba(251, 191, 36, 0.9) 0%, transparent 60%)',
             }}
           />
-          <svg width="44" height="56" viewBox="0 0 44 56" className="relative drop-shadow-2xl">
-            <defs>
-              <linearGradient id="pointerGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#FDE68A" />
-                <stop offset="30%" stopColor="#FBBF24" />
-                <stop offset="70%" stopColor="#F59E0B" />
-                <stop offset="100%" stopColor="#D97706" />
-              </linearGradient>
-              <filter id="pointerGlow">
-                <feDropShadow
-                  dx="0"
-                  dy="2"
-                  stdDeviation="3"
-                  floodColor="#F59E0B"
-                  floodOpacity="0.6"
-                />
-              </filter>
-            </defs>
+          <svg width="44" height="56" viewBox="0 0 44 56" className="relative">
             <polygon
-              points="22,56 2,14 22,0 42,14"
-              fill="url(#pointerGold)"
-              filter="url(#pointerGlow)"
+              points="22,54 4,14 22,2 40,14"
+              fill="var(--action, #EE7C34)"
+              stroke="var(--ln, #5C668F)"
+              strokeWidth="2"
+              strokeLinejoin="round"
             />
-            <polygon points="22,50 6,16 22,4" fill="rgba(255,255,255,0.3)" />
-            <circle cx="22" cy="24" r="8" fill="#FEF3C7" />
-            <circle cx="22" cy="24" r="5" fill="#FBBF24" />
-            <circle cx="19" cy="21" r="2" fill="white" opacity="0.8" />
           </svg>
         </div>
       </div>
@@ -213,74 +173,11 @@ const FortuneWheel = memo(function FortuneWheel({
       <div className="relative aspect-square">
         <svg viewBox={`0 0 ${size} ${size}`} className="h-full w-full">
           <defs>
-            {/* Sector gradients */}
-            {prizes.map((prize, index) => {
-              const color = getSectorColors(index, prize.color);
-              return (
-                <linearGradient
-                  key={`grad-${index}`}
-                  id={`sectorGrad-${index}`}
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <stop offset="0%" stopColor={color} stopOpacity="1" />
-                  <stop offset="50%" stopColor={color} stopOpacity="0.85" />
-                  <stop offset="100%" stopColor={color} stopOpacity="0.7" />
-                </linearGradient>
-              );
-            })}
-
-            {/* Outer ring gradient */}
-            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#C084FC" />
-              <stop offset="25%" stopColor="#A855F7" />
-              <stop offset="50%" stopColor="#7C3AED" />
-              <stop offset="75%" stopColor="#A855F7" />
-              <stop offset="100%" stopColor="#C084FC" />
-            </linearGradient>
-
-            {/* Hub gradient */}
-            <radialGradient id="hubGrad" cx="30%" cy="30%" r="70%">
-              <stop offset="0%" stopColor="#818CF8" />
-              <stop offset="50%" stopColor="#6366F1" />
-              <stop offset="100%" stopColor="#4338CA" />
-            </radialGradient>
-
-            {/* Text shadow filter */}
-            <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#000" floodOpacity="0.7" />
-            </filter>
-
-            {/* LED glow as a soft gradient instead of a CSS blur. CSS filters on
-                cx/cy-positioned SVG elements mis-render under the spin's GPU
-                compositing — phantom streaks toward the centre that are often
-                invisible in screen recordings but visible live. */}
-            <radialGradient id="ledGlowGrad">
-              <stop offset="0%" stopColor="#FEF08A" stopOpacity="0.95" />
-              <stop offset="45%" stopColor="#FDE047" stopOpacity="0.55" />
-              <stop offset="100%" stopColor="#FDE047" stopOpacity="0" />
-            </radialGradient>
-
-            {/* SVG-native emoji shadow (not a CSS filter) for the same reason */}
+            {/* SVG-native emoji shadow (not a CSS filter): CSS-фильтры ломаются под GPU-слоем спина */}
             <filter id="emojiShadow" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#000" floodOpacity="0.5" />
+              <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#000" floodOpacity="0.4" />
             </filter>
           </defs>
-
-          {/* Background shadow */}
-          <circle cx={center} cy={center + 6} r={outerRadius + 5} fill="rgba(0,0,0,0.3)" />
-
-          {/* Inner ring border */}
-          <circle
-            cx={center}
-            cy={center}
-            r={innerRadius}
-            fill="none"
-            stroke="rgba(255,255,255,0.2)"
-            strokeWidth="2"
-          />
 
           {/* Rotating wheel group — угол атрибутом, см. эффект спина выше */}
           <g ref={wheelRef} transform={rotateAttr(restAngle)}>
@@ -289,8 +186,8 @@ const FortuneWheel = memo(function FortuneWheel({
               <path
                 key={`sector-${prize.id}`}
                 d={createSectorPath(index)}
-                fill={`url(#sectorGrad-${index})`}
-                stroke="rgba(255,255,255,0.15)"
+                fill={getSectorColors(index)}
+                stroke="var(--paper, #0E1530)"
                 strokeWidth="2"
               />
             ))}
@@ -309,7 +206,7 @@ const FortuneWheel = memo(function FortuneWheel({
                   y1={y1}
                   x2={x2}
                   y2={y2}
-                  stroke="rgba(255,255,255,0.25)"
+                  stroke="var(--paper, #0E1530)"
                   strokeWidth="2"
                 />
               );
@@ -347,120 +244,27 @@ const FortuneWheel = memo(function FortuneWheel({
               ничем не накрыт. */}
           {/* Outer decorative ring */}
           <circle
+            data-testid="wheel-ring"
             cx={center}
             cy={center}
             r={outerRadius}
             fill="none"
-            stroke="url(#ringGrad)"
-            strokeWidth="15"
-          />
-
-          {/* LED chase animation — pure CSS, no React re-renders */}
-          <style>
-            {`
-              @keyframes ledChase {
-                0%, 100% { fill: #374151; stroke: #1F2937; }
-                10%, 30% { fill: #FEF08A; stroke: #FDE047; }
-              }
-              @keyframes ledGlow {
-                0%, 100% { fill-opacity: 0; }
-                10%, 30% { fill-opacity: 0.4; }
-              }
-              .led-dot { animation: ledChase 6s linear infinite; }
-              .led-glow { fill-opacity: 0; animation: ledGlow 6s linear infinite; }
-              .led-spinning .led-dot { animation-duration: 2s; }
-              .led-spinning .led-glow { animation-duration: 2s; }
-            `}
-          </style>
-          <g className={isSpinning ? 'led-spinning' : undefined}>
-            {Array.from({ length: 20 }).map((_, i) => {
-              const angle = (i * 18 - 90) * (Math.PI / 180);
-              const ledRadius = outerRadius + 3;
-              const dotX = center + ledRadius * Math.cos(angle);
-              const dotY = center + ledRadius * Math.sin(angle);
-              // Delay as fraction of full cycle — CSS handles speed via animation-duration
-              const delay = `${(i / 20) * 6}s`;
-              return (
-                <g key={`led-${i}`}>
-                  <circle
-                    className="led-glow"
-                    cx={dotX}
-                    cy={dotY}
-                    r={9}
-                    fill="url(#ledGlowGrad)"
-                    style={{ animationDelay: delay }}
-                  />
-                  <circle
-                    className="led-dot"
-                    cx={dotX}
-                    cy={dotY}
-                    r={3.5}
-                    strokeWidth="1"
-                    style={{ animationDelay: delay }}
-                  />
-                </g>
-              );
-            })}
-          </g>
-
-          {/* Center hub */}
-          <circle
-            cx={center}
-            cy={center}
-            r={hubRadius}
-            fill="url(#hubGrad)"
-            stroke="#A5B4FC"
+            stroke="var(--ln, #5C668F)"
             strokeWidth="3"
           />
 
-          {/* Hub inner decoration */}
+          {/* Center hub */}
           <circle
+            data-testid="wheel-hub"
             cx={center}
             cy={center}
-            r={hubRadius - 8}
-            fill="none"
-            stroke="rgba(255,255,255,0.2)"
-            strokeWidth="1"
+            r={hubRadius}
+            fill="var(--plate, #16203C)"
+            stroke="var(--ln, #5C668F)"
+            strokeWidth="3"
           />
-
-          {/* Hub shine */}
-          <ellipse cx={center - 10} cy={center - 12} rx={15} ry={10} fill="rgba(255,255,255,0.2)" />
-
-          {/* Center button */}
-          <circle
-            cx={center}
-            cy={center}
-            r={hubRadius - 12}
-            fill="#312E81"
-            stroke="#6366F1"
-            strokeWidth="2"
-          />
-
-          {/* Center text */}
-          <text
-            x={center}
-            y={center + 1}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fontSize="11"
-            fontWeight="bold"
-            fill="#C7D2FE"
-            letterSpacing="0.15em"
-          >
-            {isSpinning ? '...' : 'SPIN'}
-          </text>
+          <circle cx={center} cy={center} r={hubRadius / 3} fill="var(--action, #EE7C34)" />
         </svg>
-
-        {/* Spinning overlay glow */}
-        {isSpinning && (
-          <div
-            className="pointer-events-none absolute inset-0 rounded-full"
-            style={{
-              background: 'radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 50%)',
-              animation: 'pulse 0.5s ease-in-out infinite',
-            }}
-          />
-        )}
       </div>
     </div>
   );

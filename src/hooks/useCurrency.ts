@@ -74,7 +74,8 @@ export function useCurrency() {
   // Format amount with currency symbol
   const formatWithCurrency = useCallback(
     (rubAmount: number, decimals: number = 2): string => {
-      return `${formatAmount(rubAmount, decimals)}\u00A0${currencySymbol}`;
+      // Origami: целые суммы без копеек («1 250 ₽», а не «1 250,00 ₽»)
+      return `${formatAmount(rubAmount, decimals).replace(/[.,]00$/, '')}\u00A0${currencySymbol}`;
     },
     [formatAmount, currencySymbol],
   );
@@ -82,7 +83,7 @@ export function useCurrency() {
   // Format amount with + sign (for earnings/bonuses)
   const formatPositive = useCallback(
     (rubAmount: number, decimals: number = 2): string => {
-      return `+${formatAmount(rubAmount, decimals)}\u00A0${currencySymbol}`;
+      return `+${formatAmount(rubAmount, decimals).replace(/[.,]00$/, '')}\u00A0${currencySymbol}`;
     },
     [formatAmount, currencySymbol],
   );

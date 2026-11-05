@@ -15,8 +15,8 @@
   width: var(--og-side-w);
   padding: 20px 14px;
   overflow-y: auto;
-  border-right: 1.5px solid var(--og-line);
-  background: var(--og-plate);
+  border-right: 1px dashed var(--og-crease);
+  background: rgb(var(--color-dark-950));
   color: var(--og-text);
 }
 .og-side-logo {
@@ -29,26 +29,25 @@
 .og-side-nav-2 {
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1.5px dashed var(--og-crease);
+  border-top: 1px dashed var(--og-crease);
 }
 .og-side-link {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  border: 1.5px solid transparent;
-  border-radius: 2px;
+  border-radius: 8px;
   color: var(--og-muted);
   font-weight: 500;
 }
 .og-side-link:hover {
   color: var(--og-text);
+  background: rgba(var(--color-accent-500), 0.08);
 }
-.og-side-link-on {
-  border-color: var(--og-line);
-  background: rgba(var(--color-accent-500), 0.16);
+.og-side-link-on,
+.og-side-link-on:hover {
+  background: var(--og-pale);
   color: var(--og-text);
-  box-shadow: 3px 3px 0 var(--og-shadow);
 }
 .og-side-link-admin {
   color: rgb(var(--color-warning-400));
@@ -61,8 +60,9 @@
   display: grid;
   gap: 8px;
   padding: 12px;
-  border: 1.5px dashed var(--og-crease);
-  border-radius: 2px;
+  border: 1px solid var(--og-crease);
+  border-radius: 12px;
+  background: var(--og-plate);
 }
 .og-side-balance-v {
   font: 900 30px / 1 var(--og-display);
@@ -97,9 +97,9 @@
   place-items: center;
   width: 40px;
   height: 40px;
-  border: 1.5px solid var(--og-line);
-  border-radius: 2px;
-  background: var(--og-plate);
+  border: 1px solid var(--og-crease);
+  border-radius: 8px;
+  background: transparent;
   color: var(--og-text);
   cursor: pointer;
 }
@@ -131,8 +131,8 @@
   gap: 4px;
   padding: 6px max(6px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom))
     max(6px, env(safe-area-inset-left));
-  border-top: 1.5px solid var(--og-line);
-  background: var(--og-plate);
+  border-top: 1px dashed var(--og-crease);
+  background: rgb(var(--color-dark-950));
 }
 .og-bnav-item {
   display: flex;
@@ -143,8 +143,8 @@
   min-width: 0;
   min-height: 52px;
   padding: 6px 2px;
-  border: 1.5px solid transparent;
-  border-radius: 2px;
+  border: 0;
+  border-radius: 8px;
   background: none;
   color: var(--og-muted);
   font: 500 10px / 1.1 var(--og-mono);
@@ -158,8 +158,7 @@
   white-space: nowrap;
 }
 .og-bnav-item-on {
-  border-color: var(--og-line);
-  background: rgba(var(--color-accent-500), 0.16);
+  background: var(--og-pale);
   color: var(--og-text);
 }
 @media (min-width: 1024px) {
@@ -174,14 +173,13 @@
   margin: 0;
 }
 .og-h1-panel {
-  font-size: 44px;
+  font-size: 38px;
 }
 .og-connect-banner {
-  margin-top: 20px;
+  margin-top: 16px;
   display: grid;
   gap: 6px;
-  border-color: rgb(var(--color-accent-400));
-  box-shadow: 6px 6px 0 var(--og-shadow);
+  border-color: var(--og-accent-text);
 }
 .og-banner-title {
   font-size: 40px;
@@ -193,14 +191,14 @@
 .og-grid4 {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 20px;
+  gap: 12px;
+  margin-top: 16px;
 }
 .og-grid2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 16px;
+  gap: 12px;
+  margin-top: 12px;
 }
 .og-grid2-one {
   grid-template-columns: minmax(0, 1fr);
@@ -210,14 +208,13 @@
   flex-direction: column;
   gap: 6px;
   min-width: 0;
-  padding: 18px;
-  border: 1.5px solid var(--og-line);
-  border-radius: 2px;
+  padding: 16px;
+  border: 1px solid var(--og-crease);
+  border-radius: 12px;
   background: var(--og-plate);
 }
 .og-w-hot {
-  border-color: rgb(var(--color-accent-400));
-  box-shadow: 4px 4px 0 var(--og-shadow);
+  border-color: var(--og-accent-text);
 }
 .og-w-head {
   display: flex;
@@ -227,7 +224,7 @@
   min-height: 24px;
 }
 .og-w-val {
-  font: 900 54px / 1 var(--og-display);
+  font: 900 44px / 1 var(--og-display);
   margin-top: 6px;
   overflow-wrap: anywhere;
 }
@@ -319,9 +316,9 @@ html.dark .og-drawer-bg {
   overscroll-behavior: contain;
   transform: translate(-50%, -50%);
   border: 1.5px solid var(--og-line);
-  border-radius: 2px;
-  background: rgb(var(--color-dark-950));
-  box-shadow: 8px 8px 0 var(--og-shadow);
+  border-radius: 10px;
+  background: var(--og-plate);
+  box-shadow: none;
   color: var(--og-text);
   outline: 0;
 }
@@ -366,7 +363,8 @@ html.dark .og-drawer-bg {
       max(18px, env(safe-area-inset-left));
     transform: none;
     border-width: 1.5px 0 0;
-    box-shadow: 0 -6px 0 var(--og-shadow);
+    border-radius: 12px 12px 0 0;
+    box-shadow: none;
   }
   .og-modal-title {
     font-size: 32px;
@@ -406,7 +404,7 @@ html.dark .og-drawer-bg {
     max-width: none;
     margin: 0 0 0 56px;
     padding-left: 56px;
-    border-left: 1.5px dashed var(--og-crease);
+    border-left: 1px dashed var(--og-crease);
     color: var(--og-text);
   }
   .og-login-list {
@@ -423,12 +421,12 @@ html.dark .og-drawer-bg {
   }
 }
 
-/* стоковые страницы под панелью: заголовок страницы как у «Обзора» (узкий шрифт, 44 px; на телефоне 34 px).
-   Карточки, поля и кнопки стока уже приводит к бумажному стилю оверлей brand.css. */
+/* стоковые страницы под панелью: заголовок страницы как у «Обзора» (узкий шрифт, 38 px; на телефоне 34 px).
+   Карточки, поля и кнопки стока приводит к стилю программы оверлей brand.css. */
 .og-panel-main h1.text-2xl {
   font-family: var(--og-display);
   font-weight: 900;
-  font-size: 44px;
+  font-size: 38px;
   line-height: 1.02;
   letter-spacing: 0.01em;
   color: var(--og-text);
@@ -492,7 +490,7 @@ html.dark .og-drawer-bg {
   align-items: center;
   gap: 10px;
   min-height: 34px;
-  border-top: 1.5px dashed var(--og-crease);
+  border-top: 1px dashed var(--og-crease);
 }
 .og-srv li:first-child {
   border-top: 0;
@@ -665,8 +663,8 @@ html.dark .og-drawer-bg {
   width: 100%;
   min-height: 40px;
   padding: 6px 10px;
-  border: 1.5px solid var(--og-line);
-  border-radius: 2px;
+  border: 1px solid var(--og-crease);
+  border-radius: 8px;
   background: var(--og-field);
   color: var(--og-text);
   font-weight: 600;
@@ -691,8 +689,9 @@ html.dark .og-drawer-bg {
 /* лист «Ещё» панели: список как в боковой колонке (иконка, обычный шрифт), тихий «Выйти» */
 .og-sheet-panel .og-sheet-nav {
   gap: 0;
-  border: 1.5px solid var(--og-line);
-  border-radius: 2px;
+  border: 1px solid var(--og-crease);
+  border-radius: 12px;
+  overflow: hidden;
   background: var(--og-plate);
 }
 .og-sheet-panel .og-menu-item {
@@ -707,14 +706,14 @@ html.dark .og-drawer-bg {
   letter-spacing: 0;
 }
 .og-sheet-panel .og-menu-item + .og-menu-item {
-  border-top: 1.5px dashed var(--og-crease);
+  border-top: 1px dashed var(--og-crease);
 }
 .og-sheet-panel .og-menu-item > svg:last-child {
   margin-left: auto;
   color: var(--og-muted);
 }
 .og-sheet-panel .og-menu-item-on {
-  background: rgba(var(--color-accent-500), 0.16);
+  background: var(--og-pale);
   box-shadow: none;
 }
 .og-sheet-panel .og-menu-ico {
@@ -749,7 +748,7 @@ html.dark .og-drawer-bg {
     gap: 2px;
   }
   .og-side-link {
-    padding: 8px 12px;
+    padding: 7px 12px;
   }
   .og-side-nav-2 {
     margin-top: 6px;
@@ -1040,4 +1039,21 @@ html.dark .og-drawer-bg {
   .og-cn .og-cn-add {
     width: 100%;
   }
+}
+
+/* страница подписки: способы автоплатежа свёрнуты; если их нет, блок не показывается */
+.og-autopay-more {
+  margin-top: 12px;
+  font-size: 14px;
+}
+.og-autopay-more summary {
+  width: fit-content;
+  color: var(--og-accent-text);
+  cursor: pointer;
+}
+.og-autopay-more:not(:has(.og-autopay-body > *)) {
+  display: none;
+}
+.og-autopay-body {
+  margin-top: 10px;
 }

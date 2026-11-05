@@ -184,7 +184,7 @@ export default function Balance() {
       <motion.div variants={staggerItem}>
         <Card>
           <div className="mb-2 text-sm text-dark-400">{t('balance.currentBalance')}</div>
-          <div className="text-4xl font-bold text-dark-50 sm:text-5xl">
+          <div className="font-display text-4xl font-black text-dark-50 sm:text-5xl">
             {formatAmount(balanceData?.balance_rubles || 0)}
             <span className="ml-2 text-2xl text-dark-400">{currencySymbol}</span>
           </div>
