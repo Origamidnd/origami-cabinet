@@ -906,6 +906,10 @@ html.dark .og-drawer-bg {
     0 100%
   );
 }
+.og-cn-tile svg {
+  width: 20px;
+  height: 20px;
+}
 .og-cn-tile::after {
   content: "";
   position: absolute;

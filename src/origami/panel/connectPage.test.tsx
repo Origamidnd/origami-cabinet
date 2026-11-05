@@ -2,6 +2,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { appIconSvg } from '../connect/appIcon';
 import { findAddHelp, hasAddButton } from '../connect/connectModel';
 import ConnectPageView, { type ConnectPageViewProps } from './ConnectPageView';
 import PanelAddDevice from './PanelAddDevice';
@@ -177,6 +178,33 @@ describe('модель подключения', () => {
     expect(findAddHelp(a, 'ru')).toBe('В INCY нажмите +');
     const plain = app([{ description: { ru: 'Текст' }, buttons: [button('subscriptionLink')] }]);
     expect(findAddHelp(plain, 'ru')).toBe('Текст');
+  });
+});
+
+describe('значки приложений', () => {
+  const svg =
+    '<svg viewBox="0 0 50 50"><path fill="#FAFAFA" d="M0 0"/><path stroke="white" d="M1 1"/></svg>';
+
+  it('белая заливка становится текущим цветом, иначе в светлой теме значка не видно', () => {
+    const out = appIconSvg('A', { A: svg });
+    expect(out).toContain('fill="currentColor"');
+    expect(out).toContain('stroke="currentColor"');
+    expect(out).not.toMatch(/#FAFAFA|white/i);
+  });
+
+  it('значок очищается и берётся в обоих форматах библиотеки', () => {
+    const out = appIconSvg('A', {
+      A: { svgString: '<svg onload="x()"><script>x()</script></svg>' },
+    });
+    expect(out).not.toMatch(/onload|script/);
+  });
+
+  it('нет ключа или значка - пусто, тогда показывается буква', () => {
+    expect(appIconSvg(undefined, { A: svg })).toBe('');
+    expect(appIconSvg('B', { A: svg })).toBe('');
+    expect(appIconSvg('A', undefined)).toBe('');
+    open({ apps: [{ name: 'Happ', recommended: true, selected: true, icon: '' }] });
+    expect(screen.getByRole('radio', { name: /Happ/ }).textContent).toContain('H');
   });
 });
 

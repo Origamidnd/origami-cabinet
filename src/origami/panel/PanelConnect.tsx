@@ -5,6 +5,7 @@ import { subscriptionApi } from '@/api/subscription';
 import { usePlatform } from '@/platform';
 import { copyToClipboard } from '@/utils/clipboard';
 import { appId, localized, recommendedApp } from '../connect/connectModel';
+import { appIconSvg } from '../connect/appIcon';
 import { useConnect } from '../connect/useConnect';
 import { useWizardProgress } from '../wizard/useWizardProgress';
 import ConnectPageView, { type ConnectState } from './ConnectPageView';
@@ -107,6 +108,7 @@ export default function PanelConnect({
         .map((app) => ({
           name: app.name,
           recommended: app.name === recommended,
+          icon: appIconSvg(app.svgIconKey, connect.config?.svgLibrary),
           selected: connect.app?.name === app.name,
         }))
         // рекомендуемое приложение первым, остальные в порядке проекта

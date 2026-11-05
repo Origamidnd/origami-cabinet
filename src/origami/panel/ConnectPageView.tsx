@@ -11,6 +11,8 @@ export interface ConnectApp {
   name: string;
   recommended: boolean;
   selected: boolean;
+  /** Очищенный SVG значка; пусто - показываем первую букву. */
+  icon?: string;
 }
 
 export type ConnectState = 'idle' | 'waiting' | 'connected' | 'slow';
@@ -139,6 +141,11 @@ export default function ConnectPageView(props: ConnectPageViewProps) {
           <div role="radiogroup" aria-label={t('origami.connect.app')}>
             {props.apps.map((app) => {
               const extra = !app.recommended && !app.selected;
+              const tile = {
+                className: 'og-cn-tile',
+                'aria-hidden': true,
+                style: { '--og-tile-hue': tileHue(app.name) } as React.CSSProperties,
+              };
               return (
                 <button
                   key={app.name}
@@ -148,13 +155,15 @@ export default function ConnectPageView(props: ConnectPageViewProps) {
                   className={`og-cn-app ${extra ? 'og-cn-extra' : ''} ${showAll ? 'is-open' : ''}`}
                   onClick={() => props.onApp(app.name)}
                 >
-                  <span
-                    className="og-cn-tile"
-                    aria-hidden="true"
-                    style={{ '--og-tile-hue': tileHue(app.name) } as React.CSSProperties}
-                  >
-                    {app.name.charAt(0).toUpperCase()}
-                  </span>
+                  {app.icon ? (
+                    <span
+                      {...tile}
+                      // biome-ignore lint/security/noDangerouslySetInnerHtml: SVG очищен в appIconSvg
+                      dangerouslySetInnerHTML={{ __html: app.icon }}
+                    />
+                  ) : (
+                    <span {...tile}>{app.name.charAt(0).toUpperCase()}</span>
+                  )}
                   <span className="og-cn-app-name">{app.name}</span>
                   {app.recommended && (
                     <span className="og-cn-rec">{t('origami.add.recommended')}</span>
