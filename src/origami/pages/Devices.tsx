@@ -233,7 +233,6 @@ function SubscriptionDevices({
                   <input
                     type="text"
                     className="og-dev-input"
-                    // biome-ignore lint/a11y/noAutofocus: поле появляется по нажатию «Переименовать»
                     autoFocus
                     value={name}
                     maxLength={DEVICE_ALIAS_MAX_LENGTH}

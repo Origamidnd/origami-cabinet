@@ -232,6 +232,36 @@
       "unlimited": "no limit",
       "empty": "No devices connected yet. It takes a couple of minutes.",
       "removeAll": "Remove all devices"
+    },
+    "connect": {
+      "eyebrow": "New device",
+      "title": "Connect a device",
+      "back": "Back",
+      "device": "Device",
+      "detected": "detected automatically, you can change it",
+      "app": "App",
+      "more": "Other apps: {{count}}",
+      "manual": "No button",
+      "step1": "Install {{app}}",
+      "step1Text": "Already installed? Go straight to step 2.",
+      "step2": "Add the subscription",
+      "step2Text": "{{app}} opens and adds the subscription itself.",
+      "step2Manual": "Copy the link and paste it into {{app}} as a new subscription.",
+      "add": "Add to {{app}}",
+      "notOpened": "Did not open?",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "step3": "Turn on the VPN",
+      "step3Text": "Pick a server in the app and press connect.",
+      "waiting": "Waiting for the device to appear in the list…",
+      "slow": "The device has not appeared yet.",
+      "help": "Contact support",
+      "connected": "Device connected",
+      "done": "To my devices",
+      "other": "Another device",
+      "otherText": "Setting up a phone or TV nearby? Point its camera at the code.",
+      "notConfigured": "The app list is not available yet.",
+      "open": "Open the standard page"
     }
   }
 }

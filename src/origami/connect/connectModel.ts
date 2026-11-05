@@ -118,6 +118,37 @@ export function findInstall(
   return { links: [], text: '' };
 }
 
+/**
+ * Умеет ли приложение принять подписку по кнопке. У v2rayN и v2rayNG такой кнопки нет: `findAddLink` вернул бы
+ * саму ссылку подписки, и она открылась бы в браузере, поэтому для них подписку копируют вручную.
+ */
+export function hasAddButton(app: RemnawaveAppClient | null): boolean {
+  if (!app) return false;
+  return (
+    Boolean(app.deepLink) ||
+    (app.blocks ?? []).some((block) =>
+      (block.buttons ?? []).some((button) => button.type === 'subscriptionLink'),
+    )
+  );
+}
+
+/**
+ * Что делать, если кнопка не сработала: описание блока с кнопкой добавления (у приложений без кнопки - второй блок).
+ * Из текста вида «Нажмите кнопку - ... Если не открылось - ...» берётся только вторая часть.
+ */
+export function findAddHelp(app: RemnawaveAppClient | null, lang: string | undefined): string {
+  const blocks = app?.blocks ?? [];
+  const block =
+    blocks.find((b) => (b.buttons ?? []).some((button) => button.type === 'subscriptionLink')) ??
+    blocks[1];
+  const text = localized(block?.description, lang).trim();
+  const fallback = text
+    .match(/Если(?:\s+\S+)?\s+не открылось\s*[-\u2013\u2014,:]\s*(.+)$/su)?.[1]
+    ?.trim();
+  if (!fallback) return text;
+  return fallback.charAt(0).toUpperCase() + fallback.slice(1);
+}
+
 /** Текст на языке интерфейса с запасными вариантами, как делает стоковый гид. */
 export function localized(text: LocalizedText | undefined, lang: string | undefined): string {
   if (!text) return '';

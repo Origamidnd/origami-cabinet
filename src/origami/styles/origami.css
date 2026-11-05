@@ -18,6 +18,7 @@
   --og-body: var(--f-body, "Onest", system-ui, sans-serif);
   --og-accent-text: #f59b5b;
   --og-danger-text: #ef8a72;
+  --og-pale: #3a2a22;
   color: var(--og-text);
   max-width: 720px;
   margin: 0 auto;
@@ -446,10 +447,12 @@
   --og-body: var(--f-body, "Onest", system-ui, sans-serif);
   --og-accent-text: #f59b5b;
   --og-danger-text: #ef8a72;
+  --og-pale: #3a2a22;
 }
 html.light :is(.og, .og-shell) {
   --og-accent-text: #b5501a;
   --og-danger-text: #be3a22;
+  --og-pale: #fbe3cc;
 }
 .og-header {
   position: fixed;

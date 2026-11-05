@@ -13,9 +13,11 @@ import { useWizardProgress } from '../wizard/useWizardProgress';
 import {
   appId,
   detectPlatform,
+  findAddHelp,
   findAddLink,
   findInstall,
   findInstallUrl,
+  hasAddButton,
   type InstallLink,
   orderPlatforms,
   recommendedApp,
@@ -35,6 +37,10 @@ export interface ConnectModel {
   /** Все ссылки установки с подписями и описание шага установки из конфига. */
   installLinks: InstallLink[];
   installText: string;
+  /** Приложение принимает подписку по кнопке; иначе ссылку копируют и вставляют вручную. */
+  canAddByButton: boolean;
+  /** Что делать, если кнопка не сработала (текст из конфига приложения). */
+  addHelp: string;
   /** Адрес для QR и кнопки копирования (учитывает режим Happ cryptolink). */
   qrUrl: string | null;
   hideLink: boolean;
@@ -164,6 +170,8 @@ export function useConnect(subscriptionId?: number): ConnectModel {
     installUrl,
     installLinks: install.links,
     installText: install.text,
+    canAddByButton: hasAddButton(app),
+    addHelp: findAddHelp(app, i18n.language),
     qrUrl,
     hideLink: link?.hide_link ?? config?.hideLink ?? false,
     config,

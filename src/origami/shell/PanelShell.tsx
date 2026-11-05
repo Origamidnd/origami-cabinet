@@ -36,9 +36,9 @@ registerOrigamiLocales();
 
 const MORE_ID = 'og-more';
 
-/** Экраны-окна поверх обзора: штора подключения и пополнение. */
+/** Экраны-окна поверх обзора: пополнение. */
 function isOverlayPath(path: string): boolean {
-  return path === '/add-device' || path.startsWith('/balance/top-up');
+  return path.startsWith('/balance/top-up');
 }
 
 /**
@@ -88,8 +88,8 @@ export default function PanelShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     setMoreOpen(false);
   }, [location.pathname]);
-  // Новый экран открывается с начала. Штора подключения и окно пополнения ложатся поверх: ни при их
-  // открытии, ни при возврате из них прокрутку не трогаем.
+  // Новый экран открывается с начала. Окно пополнения ложится поверх: ни при его открытии,
+  // ни при возврате из него прокрутку не трогаем.
   const prevPath = useRef(location.pathname);
   useEffect(() => {
     const from = prevPath.current;

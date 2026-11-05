@@ -1,27 +1,22 @@
 import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import HomeScreen from '@/pages/HomeScreen';
 import '../styles/origami.css';
 import '../styles/panel.css';
-import PanelConnectSheet from './PanelConnectSheet';
+import PanelConnect from './PanelConnect';
 
 /**
- * Маршрут `/add-device` в панели: обзор остаётся под шторой «Подключить устройство». Ссылки на этот адрес
- * (письма, `brand.js`) работают как раньше, а закрытие возвращает туда, откуда пришли, или на обзор.
+ * Маршрут `/add-device` в панели: отдельный экран подключения. Ссылки на этот адрес (письма, `brand.js`)
+ * работают как раньше. «Назад» возвращает туда, откуда пришли, а при входе прямо по ссылке на обзор.
  */
 export default function PanelAddDevice() {
   const navigate = useNavigate();
   const { key } = useLocation();
-  const close = useCallback(() => {
-    // `default` - вход прямо на адрес шторы: истории внутри приложения нет.
+  const back = useCallback(() => {
+    // `default` - вход прямо на этот адрес: истории внутри приложения нет.
     if (key === 'default') navigate('/', { replace: true });
     else navigate(-1);
   }, [key, navigate]);
+  const done = useCallback(() => navigate('/devices'), [navigate]);
 
-  return (
-    <>
-      <HomeScreen />
-      <PanelConnectSheet onClose={close} />
-    </>
-  );
+  return <PanelConnect onBack={back} onDone={done} />;
 }
