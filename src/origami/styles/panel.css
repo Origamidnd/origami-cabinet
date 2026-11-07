@@ -610,6 +610,18 @@ html.dark .og-drawer-bg {
 .og-w-loading {
   min-height: 220px;
 }
+.og-devices-count {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.og-devices-count .og-btn {
+  flex: none;
+}
+.og-devices-buy {
+  margin-top: 14px;
+}
 .og-devices-list {
   margin-top: 10px;
 }

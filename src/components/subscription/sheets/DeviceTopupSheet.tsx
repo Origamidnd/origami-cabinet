@@ -21,7 +21,7 @@ export interface DeviceTopupSheetProps {
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
-  subscription: Subscription;
+  subscription: Pick<Subscription, 'device_limit'>;
   subscriptionId: number | undefined;
   devicesToAdd: number;
   onDevicesToAddChange: (n: number) => void;

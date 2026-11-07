@@ -225,6 +225,7 @@
     "devicesPage": {
       "title": "Devices",
       "add": "Connect a device",
+      "topUp": "Add more",
       "noSubscription": "Devices will appear once you have a subscription.",
       "buy": "Buy a subscription",
       "eyebrow": "Your devices",

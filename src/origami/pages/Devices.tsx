@@ -4,10 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { subscriptionApi } from '@/api/subscription';
 import { CheckIcon, PencilIcon, PlusIcon, TrashIcon, XIcon } from '@/components/icons';
+import { DeviceTopupSheet } from '@/components/subscription/sheets/DeviceTopupSheet';
 import { DEVICE_ALIAS_MAX_LENGTH } from '@/constants/devices';
+import { useTheme } from '@/hooks/useTheme';
 import { useHaptic } from '@/platform';
 import { useDestructiveConfirm } from '@/platform/hooks/useNativeDialog';
 import type { Device, SubscriptionListItem } from '@/types';
+import { needsTariff } from '@/utils/legacySubscription';
 import { DeviceRow } from '../devices/DeviceRow';
 import { HelpBlock } from '../home/blocks';
 import { registerOrigamiLocales } from '../i18n';
@@ -71,6 +74,18 @@ export default function Devices() {
   );
 }
 
+/** Докупка места: сервер считает цену только для активной подписки; тест и безлимит докупать нечего. */
+export function canBuyDevices(
+  item: Pick<
+    SubscriptionListItem,
+    'status' | 'is_trial' | 'device_limit' | 'requires_tariff_selection'
+  >,
+): boolean {
+  return (
+    item.status === 'active' && !item.is_trial && item.device_limit !== 0 && !needsTariff(item)
+  );
+}
+
 function SubscriptionDevices({
   item,
   showTitle,
@@ -124,6 +139,18 @@ function SubscriptionDevices({
   const free = limit > 0 ? Math.max(0, limit - total) : null;
   const lang = i18n.language;
 
+  const { isDark } = useTheme();
+  const canBuy = canBuyDevices(item);
+  const [buying, setBuying] = useState(false);
+  const [devicesToAdd, setDevicesToAdd] = useState(1);
+  // Баланс для окна покупки: только когда окно открыто, ключ кэша как на странице подписки
+  const { data: purchaseOptions } = useQuery({
+    queryKey: ['purchase-options', item.id],
+    queryFn: () => subscriptionApi.getPurchaseOptions(item.id),
+    enabled: buying,
+    staleTime: 0,
+  });
+
   return (
     <section className="og-w og-devices" data-testid="devices-sub">
       <div className="og-w-head">
@@ -140,17 +167,45 @@ function SubscriptionDevices({
           </span>
         )}
       </div>
-      <div className="og-w-val">
-        {total}
-        {limit > 0 ? (
-          <small>{t('origami.overview.of', { limit })}</small>
-        ) : (
-          <small>{t('origami.devicesPage.unlimited')}</small>
+      <div className="og-devices-count">
+        <div className="og-w-val">
+          {total}
+          {limit > 0 ? (
+            <small>{t('origami.overview.of', { limit })}</small>
+          ) : (
+            <small>{t('origami.devicesPage.unlimited')}</small>
+          )}
+        </div>
+        {canBuy && !buying && (
+          <button
+            type="button"
+            className={`og-btn og-btn-sm${free === 0 ? '' : ' og-btn-ghost'}`}
+            data-testid="devices-buy"
+            onClick={() => setBuying(true)}
+          >
+            {t('origami.devicesPage.topUp')}
+          </button>
         )}
       </div>
       {limit > 0 && (
         <div className="og-meter" aria-hidden="true">
           <i style={{ width: `${Math.min(100, Math.round((total / limit) * 100))}%` }} />
+        </div>
+      )}
+
+      {canBuy && buying && (
+        <div className="og-devices-buy">
+          <DeviceTopupSheet
+            open
+            onOpen={() => setBuying(true)}
+            onClose={() => setBuying(false)}
+            subscription={item}
+            subscriptionId={item.id}
+            devicesToAdd={devicesToAdd}
+            onDevicesToAddChange={setDevicesToAdd}
+            purchaseOptions={purchaseOptions}
+            isDark={isDark}
+          />
         </div>
       )}
 
