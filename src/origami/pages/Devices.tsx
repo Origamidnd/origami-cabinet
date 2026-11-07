@@ -140,7 +140,8 @@ function SubscriptionDevices({
   const lang = i18n.language;
 
   const { isDark } = useTheme();
-  const canBuy = canBuyDevices(item);
+  // Лимит берём из ответа устройств: в списке подписок безлимит (0) приходит как 1
+  const canBuy = !!data && canBuyDevices({ ...item, device_limit: limit });
   const [buying, setBuying] = useState(false);
   const [devicesToAdd, setDevicesToAdd] = useState(1);
   // Баланс для окна покупки: только когда окно открыто, ключ кэша как на странице подписки
