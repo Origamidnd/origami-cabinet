@@ -1073,3 +1073,12 @@ html.dark .og-drawer-bg {
 .og-autopay-body {
   margin-top: 10px;
 }
+
+/* фиксированные шапка (64 px) и нижняя панель на телефоне и планшете не должны закрывать элемент,
+   который получил фокус с клавиатуры или прокрутку к якорю */
+@media (max-width: 1023px) {
+  html:has(.og-panel) {
+    scroll-padding-top: calc(64px + env(safe-area-inset-top, 0px) + 12px);
+    scroll-padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 12px);
+  }
+}
