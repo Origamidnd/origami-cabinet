@@ -265,7 +265,35 @@
       "open": "Open the standard page"
     },
     "subscriptionPage": {
-      "autopayMethods": "Other autopay methods"
+      "autopayMethods": "Other autopay methods",
+      "eyebrow": "Subscription",
+      "left": "Remaining",
+      "daysUnit": "d",
+      "hoursUnit": "h",
+      "until": "valid until {{date}}",
+      "expiredTitle": "Expired",
+      "expiredOn": "expired on {{date}}",
+      "renewal": "Renewal",
+      "renewalNote": "Charged from your balance. If the balance is too low, the subscription will not renew.",
+      "traffic": "Traffic",
+      "unlimited": "unlimited",
+      "of": "of {{limit}}",
+      "used": "{{pct}}% used",
+      "refresh": "Refresh",
+      "refreshIn": "in {{s}} s",
+      "devices": "Devices",
+      "free": "Free slots: {{count}}",
+      "noFree": "No free slots",
+      "connect": "Connect",
+      "allDevices": "All devices",
+      "link": "Subscription link",
+      "linkHint": "Needed if the app did not add the subscription itself: paste it into the app manually.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "locations": "Locations",
+      "packages": "Extra traffic",
+      "packageLeft": "{{count}} more days, until {{date}}",
+      "packageExpired": "expired"
     }
   }
 }

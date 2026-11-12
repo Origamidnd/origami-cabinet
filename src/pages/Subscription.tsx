@@ -16,7 +16,7 @@ import { copyToClipboard } from '../utils/clipboard';
 import { useTheme } from '../hooks/useTheme';
 import { useCloseOnSuccessNotification } from '../store/successNotification';
 import PurchaseCTAButton from '../components/subscription/PurchaseCTAButton';
-import { planTitle, showsAddonOptions } from '../utils/legacySubscription';
+import { planTitle, showsAddonOptions, showsAutopayToggle } from '../utils/legacySubscription';
 import {
   CalendarIcon,
   CheckIcon,
@@ -40,6 +40,7 @@ import {
 } from '../components/subscription/manage/ReissueLinkButton';
 import { DevicesPanel } from '../components/subscription/manage/DevicesPanel';
 import { ORIGAMI_SHELL } from '../origami/shell/config';
+import SubscriptionTicket from '../origami/subscription/SubscriptionTicket';
 import { RecurringPanels } from '../components/subscription/manage/RecurringPanels';
 import { DeviceTopupSheet } from '../components/subscription/sheets/DeviceTopupSheet';
 import { DeviceReductionSheet } from '../components/subscription/sheets/DeviceReductionSheet';
@@ -435,17 +436,31 @@ export default function Subscription() {
     );
   }
 
+  // Origami: в панели страница подписки собрана из пластин «Обзора» (src/origami/subscription)
+  const isPanel = ORIGAMI_SHELL === 'panel';
+
   return (
-    <div className="space-y-6">
+    <div className={isPanel ? 'og og-wide space-y-5' : 'space-y-6'}>
       {/* Page title */}
-      <div className="flex items-center gap-3">
-        <WebBackButton to={isMultiTariff ? '/subscriptions' : '/'} />
-        <h1 className="text-2xl font-bold text-dark-50 sm:text-3xl">
-          {isMultiTariff && subscription?.tariff_name
-            ? subscription.tariff_name
-            : t('subscription.title')}
-        </h1>
-      </div>
+      {isPanel ? (
+        <div className="og-page-head">
+          <div>
+            <div className="og-eyebrow">{t('origami.subscriptionPage.eyebrow')}</div>
+            <h1 className="og-h1 og-h1-panel">
+              {subscription ? planTitle(subscription, t) : t('subscription.title')}
+            </h1>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-center gap-3">
+          <WebBackButton to={isMultiTariff ? '/subscriptions' : '/'} />
+          <h1 className="text-2xl font-bold text-dark-50 sm:text-3xl">
+            {isMultiTariff && subscription?.tariff_name
+              ? subscription.tariff_name
+              : t('subscription.title')}
+          </h1>
+        </div>
+      )}
 
       {/* Purchase / Renewal CTA (Origami: главное действие сверху, на телефоне оно было ниже 1400 px) */}
       <PurchaseCTAButton
@@ -464,6 +479,59 @@ export default function Subscription() {
           const connectedDevices = devicesData?.total ?? 0;
           const isAtDeviceLimit =
             subscription.device_limit > 0 && connectedDevices >= subscription.device_limit;
+
+          if (isPanel) {
+            return (
+              <SubscriptionTicket
+                subscription={subscription}
+                usedGb={usedGb}
+                usedPercent={usedPercent}
+                isUnlimited={isUnlimited}
+                unknownTraffic={unknownTraffic}
+                trafficSummary={
+                  <ManagedTrafficSummary subscription={subscription} refreshed={trafficData} />
+                }
+                onRefreshTraffic={() => refreshTrafficMutation.mutate()}
+                refreshing={refreshTrafficMutation.isPending}
+                refreshCooldown={trafficRefreshCooldown}
+                connectedDevices={connectedDevices}
+                onConnect={() => {
+                  if (isAtDeviceLimit) {
+                    haptic.notification('error');
+                    return;
+                  }
+                  navigate('/add-device');
+                }}
+                connectionUrl={
+                  displayedConnectionUrl && !shouldHideConnectionLink
+                    ? displayedConnectionUrl
+                    : null
+                }
+                copied={copied}
+                onCopy={copyUrl}
+                showRenewal={showsAutopayToggle(subscription)}
+                autopay={
+                  <AutopayToggle
+                    subscription={subscription}
+                    subscriptionId={subscriptionId}
+                    accentColor="rgb(var(--color-accent-500))"
+                    offColor="var(--og-crease)"
+                  />
+                }
+                autopayMethods={
+                  <details className="og-autopay-more">
+                    <summary>{t('origami.subscriptionPage.autopayMethods')}</summary>
+                    <div className="og-autopay-body">
+                      <RecurringPanels
+                        subscription={subscription}
+                        subscriptionId={subscriptionId}
+                      />
+                    </div>
+                  </details>
+                }
+              />
+            );
+          }
 
           return (
             <div
@@ -1041,17 +1109,27 @@ export default function Subscription() {
       {/* Additional Options (Buy Devices) */}
       {subscription && showsAddonOptions(subscription) && (
         <div
-          className="relative overflow-hidden rounded-3xl"
-          style={{
-            background: g.cardBg,
-            border: `1px solid ${g.cardBorder}`,
-            boxShadow: g.shadow,
-            padding: '24px 28px',
-          }}
+          className={isPanel ? 'og-w og-sub-addons' : 'relative overflow-hidden rounded-3xl'}
+          style={
+            isPanel
+              ? undefined
+              : {
+                  background: g.cardBg,
+                  border: `1px solid ${g.cardBorder}`,
+                  boxShadow: g.shadow,
+                  padding: '24px 28px',
+                }
+          }
         >
-          <h2 className="mb-4 text-base font-bold tracking-tight text-dark-50">
-            {t('subscription.additionalOptions.title')}
-          </h2>
+          {isPanel ? (
+            <div className="og-w-head">
+              <span className="og-eyebrow">{t('subscription.additionalOptions.title')}</span>
+            </div>
+          ) : (
+            <h2 className="mb-4 text-base font-bold tracking-tight text-dark-50">
+              {t('subscription.additionalOptions.title')}
+            </h2>
+          )}
 
           {/* Buy Devices */}
           <DeviceTopupSheet
@@ -1117,7 +1195,12 @@ export default function Subscription() {
       )}
 
       {/* Reissue Subscription — standalone block, not dependent on device_limit */}
-      {subscription && canReissueLink(subscription) && (
+      {subscription && canReissueLink(subscription) && isPanel && (
+        <section className="og-w og-sub-reissue">
+          <ReissueLinkButton subscription={subscription} subscriptionId={subscriptionId} />
+        </section>
+      )}
+      {subscription && canReissueLink(subscription) && !isPanel && (
         <div
           className="relative overflow-hidden rounded-3xl"
           style={{
