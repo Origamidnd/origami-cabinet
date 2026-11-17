@@ -1,4 +1,5 @@
 import { isInTelegramWebApp } from '@/hooks/useTelegramSDK';
+import { openInvoiceWithFallbacks } from '@/origami/payments/openInvoice';
 import {
   showBackButton,
   hideBackButton,
@@ -18,6 +19,7 @@ import {
   deleteCloudStorageItem,
   getCloudStorageKeys,
   openInvoice,
+  isInvoiceOpened,
   openLink,
   openTelegramLink,
   shareURL,
@@ -287,13 +289,27 @@ export function createTelegramAdapter(): PlatformContext {
     theme: createThemeController(),
     cloudStorage: createCloudStorageController(),
 
+    // ORIGAMI 17.11.2026: в Telegram Desktop счёт звёзд не открывался - SDK бросал исключение, а запасной
+    // window.open встроенное окно молча блокирует. Теперь SDK -> старый WebApp.openInvoice -> ссылка через Telegram.
     openInvoice(url: string): Promise<InvoiceStatus> {
-      try {
-        return openInvoice(url, 'url') as Promise<InvoiceStatus>;
-      } catch {
-        window.open(url, '_blank');
-        return Promise.resolve('pending');
-      }
+      const legacy = window.Telegram?.WebApp;
+      return openInvoiceWithFallbacks(url, {
+        sdkAvailable: () =>
+          typeof openInvoice.isAvailable === 'function' ? openInvoice.isAvailable() : true,
+        sdkOpened: () => isInvoiceOpened(),
+        sdkOpen: (u) => openInvoice(u, 'url') as Promise<InvoiceStatus>,
+        legacyOpenInvoice:
+          typeof legacy?.openInvoice === 'function'
+            ? (u, callback) => legacy.openInvoice?.(u, callback)
+            : null,
+        openTelegramLink: (u) => {
+          try {
+            openTelegramLink(u);
+          } catch {
+            legacy?.openTelegramLink?.(u);
+          }
+        },
+      });
     },
 
     openLink(url: string, options?: { tryInstantView?: boolean }) {

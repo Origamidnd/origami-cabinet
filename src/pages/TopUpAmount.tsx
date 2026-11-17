@@ -201,6 +201,9 @@ export default function TopUpAmount() {
         setError(t('balance.errors.noPaymentLink'));
         return;
       }
+      // ORIGAMI 17.11.2026: сразу показываем блок "Открыть оплату" со ссылкой на счёт - если окно оплаты
+      // не появилось (Telegram Desktop), у клиента есть кнопка, а не тишина. Ссылка t.me открывается через Telegram.
+      setPaymentUrl(data.invoice_url);
       try {
         const status = await openInvoice(data.invoice_url);
         if (status === 'paid') {

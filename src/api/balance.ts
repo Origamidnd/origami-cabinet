@@ -1,5 +1,7 @@
 ﻿import apiClient from './client';
 import i18n from '../i18n';
+import { isInTelegramWebApp } from '@/hooks/useTelegramSDK';
+import { hideStarsOutsideTelegram } from '@/origami/payments/openInvoice';
 import type {
   Balance,
   Transaction,
@@ -35,7 +37,8 @@ export const balanceApi = {
   // Get available payment methods
   getPaymentMethods: async (): Promise<PaymentMethod[]> => {
     const response = await apiClient.get<PaymentMethod[]>('/cabinet/balance/payment-methods');
-    return response.data;
+    // ORIGAMI 17.11.2026: звёзды оплачиваются только внутри Telegram, в обычном браузере способ не показываем.
+    return hideStarsOutsideTelegram(response.data ?? [], isInTelegramWebApp());
   },
 
   // Create top-up payment

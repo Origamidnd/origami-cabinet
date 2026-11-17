@@ -27,6 +27,9 @@ interface TelegramWebAppGlobal {
    * stale — see src/utils/telegramInitData.ts.
    */
   initData?: string;
+  /** ORIGAMI: старый API счёта и ссылок, запасной путь для звёзд (src/origami/payments/openInvoice.ts). */
+  openInvoice?: (url: string, callback?: (status: string) => void) => void;
+  openTelegramLink?: (url: string) => void;
 }
 
 /** Telegram Login JS SDK — loaded from https://oauth.telegram.org/js/telegram-login.js */
